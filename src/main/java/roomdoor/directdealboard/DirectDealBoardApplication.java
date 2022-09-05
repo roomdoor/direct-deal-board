@@ -9,5 +9,4 @@ public class DirectDealBoardApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DirectDealBoardApplication.class, args);
 	}
-
 }
