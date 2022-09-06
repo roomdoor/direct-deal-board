@@ -38,3 +38,5 @@ out/
 
 jacoco
 .gitmessage.txt
+document
+application.yml

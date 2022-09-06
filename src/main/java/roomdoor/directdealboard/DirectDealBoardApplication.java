@@ -10,4 +10,3 @@ public class DirectDealBoardApplication {
 		SpringApplication.run(DirectDealBoardApplication.class, args);
 	}
 }
-
