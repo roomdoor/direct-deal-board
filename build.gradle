@@ -24,6 +24,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 //    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.3'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     compileOnly 'org.projectlombok:lombok:1.18.24'
     runtimeOnly 'com.h2database:h2:2.1.214'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.0.6'
@@ -82,7 +83,7 @@ jacocoTestCoverageVerification {
 
         rule {
             // 룰을 간단히 켜고 끌 수 있다.
-            enabled = true
+            enabled = false
 
             // 룰을 체크할 단위는 클래스 단위
             element = 'CLASS'
