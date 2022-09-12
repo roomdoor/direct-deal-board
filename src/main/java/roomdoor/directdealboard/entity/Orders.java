@@ -2,7 +2,6 @@ package roomdoor.directdealboard.entity;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import lombok.*;
 
@@ -12,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Order {
+public class Orders {
 
 	@Id
 	private String orderNumber;
@@ -26,4 +25,5 @@ public class Order {
 
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+
 }

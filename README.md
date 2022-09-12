@@ -91,6 +91,19 @@
     - 판매 수
     - 생성일자
     - 수정일자
+    - create table user
+      (
+      id                  varchar(255) not null primary key, 
+      address             varchar(255) null,
+      created_at          datetime(6)  null,
+      deal_total_count    int          not null,
+      email_yn            bit          not null,
+      nick_name           varchar(255) null,
+      password            varchar(255) null,
+      password_reset_code varchar(255) null,
+      phone_number        varchar(255) null,
+      updated_at          datetime(6)  null
+      );
 
 
 2. 글
@@ -104,6 +117,19 @@
     - 판매 여부
     - 생성일자
     - 수정일자
+    - create table posts
+      (
+      id         bigint       not null primary key,
+      created_at datetime(6)  null,
+      is_sailed  bit          not null,
+      like_count bigint       null,
+      teg        varchar(255) null,
+      text       varchar(255) null,
+      title      varchar(255) null,
+      updated_at datetime(6)  null,
+      views      bigint       null,
+      writer     varchar(255) null
+      );
 
 
 3. 댓글
@@ -112,6 +138,15 @@
     - 좋아요
     - 생성일자
     - 수정일자
+    - create table comments
+      (
+      id         bigint       not null primary key,
+      comments   varchar(255) null,
+      created_at datetime(6)  null,
+      like_count bigint       null,
+      updated_at datetime(6)  null,
+      writer     varchar(255) null
+      );
 
 
 4. 주문
@@ -123,6 +158,17 @@
     - 수령 여부
     - 생성일자
     - 수정일자
+    - create table orders
+      (
+      order_number     varchar(255) not null primary key,
+      buyer            varchar(255) null,
+      created_at       datetime(6)  null,
+      delivery_company varchar(255) null,
+      delivery_number  varchar(255) null,
+      is_received      bit          not null,
+      seller           varchar(255) null,
+      updated_at       datetime(6)  null
+      );
 
 
 
