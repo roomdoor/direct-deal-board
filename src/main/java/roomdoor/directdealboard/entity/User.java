@@ -2,6 +2,8 @@ package roomdoor.directdealboard.entity;
 
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +29,7 @@ public class User {
 	private String phoneNumber;
 	private String address;
 	private int dealTotalCount;
+	@Enumerated(EnumType.STRING)
 	private UserState userState;
 
 	private String emailCode;
@@ -43,7 +46,6 @@ public class User {
 			.id(userCreateRequestDto.getId())
 			.userName(userCreateRequestDto.getUserName())
 			.nickName(userCreateRequestDto.getNickName())
-			.password(userCreateRequestDto.getPassword())
 			.phoneNumber(userCreateRequestDto.getPhoneNumber())
 			.address(userCreateRequestDto.getAddress())
 			.build();
