@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
 
 		String uuid = emailSend(createRequest);
 		String encPassword = BCrypt.hashpw(createRequest.getPassword(), BCrypt.gensalt());
-		
+
 		User user = User.DtoToUser(createRequest);
 		user.setPassword(encPassword);
 		user.setUserState(UserState.EMAIL_AUTH_NOT);
@@ -67,60 +67,62 @@ public class UserService implements UserDetailsService {
 		return uuid;
 	}
 
-	public Map<String, String> validateHandler(Errors errors) {
-		Map<String, String> result = new HashMap<>();
-
-		for (FieldError error : errors.getFieldErrors()) {
-			System.out.println(error.getField());
-			System.out.println(error.getDefaultMessage());
-
-			result.put(error.getField(), error.getDefaultMessage());
-		}
-
-		return result;
-	}
+//	public Map<String, String> validateHandler(Errors errors) {
+//		Map<String, String> result = new HashMap<>();
+//
+//		for (FieldError error : errors.getFieldErrors()) {
+//			result.put(error.getField(), error.getDefaultMessage());
+//		}
+//
+//		return result;
+//	}
 
 	public boolean emailAuth(String uuid, String email) {
-		Optional<User> optionalUser = getUser(email);
+		User user = getUser(email);
 
-		User user = optionalUser.get();
 		if (Objects.equals(user.getEmailCode(), uuid)) {
 			user.setEmailYn(true);
+			user.setUserState(UserState.NORMAL);
 			userRepository.save(user);
+			return true;
+		} else {
+			throw new UserException(ErrorCode.EMAIL_CODE_MISMATCH);
 		}
-		return true;
 	}
 
 	public User userDelete(DeleteRequest deleteRequest) {
-		Optional<User> optionalUser = getUser(deleteRequest.getId());
+		User user = getUser(deleteRequest.getId());
 
-		User user = optionalUser.get();
 		if (user.getPassword().equals(deleteRequest.getPassword())) {
 			userRepository.deleteById(deleteRequest.getId());
+		} else {
+			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
 
 		return user;
 	}
 
-	
+
 
 	public User userUpdate(UpdateRequest updateRequest) {
-		Optional<User> optionalUser = getUser(updateRequest.getId());
-
-		User user = optionalUser.get();
+		User user = getUser(updateRequest.getId());
 
 		user.setAddress(updateRequest.getAddress());
 		user.setUserName(updateRequest.getUserName());
 		user.setNickName(updateRequest.getNickName());
 		user.setPhoneNumber(updateRequest.getPhoneNumber());
+
 		return userRepository.save(user);
+	}
+
+	public List<User> list() {
+		return userRepository.findAll();
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
-		Optional<User> optionalUser = getUser(id);
+		User user = getUser(id);
 
-		User user = optionalUser.get();
 		if (user.getUserState() == UserState.EMAIL_AUTH_NOT) {
 			throw new UserException(ErrorCode.EMAIL_AUTH_FAIL);
 		}
@@ -142,15 +144,11 @@ public class UserService implements UserDetailsService {
 			user.getPassword(), grantedAuthorities);
 	}
 
-	private Optional<User> getUser(String id) {
+	private User getUser(String id) {
 		Optional<User> optionalUser = userRepository.findById(id);
 		if (!optionalUser.isPresent()) {
 			throw new UserException(ErrorCode.NOT_FOUND_USER);
 		}
-		return optionalUser;
-	}
-
-	public List<User> list() {
-		return userRepository.findAll();
+		return optionalUser.get();
 	}
 }

@@ -1,7 +1,6 @@
 package roomdoor.directdealboard.controller;
 
 import java.util.List;
-import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,25 +25,23 @@ public class UserController {
 
 	@PostMapping("/user/create")
 	public ResponseEntity<?> userCreate(
-		@RequestBody @Valid UserDto.CreateRequest createRequest, Errors errors) {
+		@RequestBody @Valid UserDto.CreateRequest createRequest
+//		, Errors errors
+	) {
 
-		if (errors.hasErrors()) {
-			Map<String, String> validResult = userService.validateHandler(errors);
-			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
-		}
+//		if (errors.hasErrors()) {
+//			Map<String, String> validResult = userService.validateHandler(errors);
+//			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
+//		}
 
 		return new ResponseEntity<>(userService.userCreate(createRequest), HttpStatus.CREATED);
 	}
 
 	@GetMapping("/user/email-auth")
-	public String emailAuth(@RequestParam String uuid, @RequestParam String email) {
-		boolean result = userService.emailAuth(uuid, email);
+	public ResponseEntity<?> emailAuth(@RequestParam String uuid, @RequestParam String email) {
+		userService.emailAuth(uuid, email);
 
-		if (result) {
-			return "인증이 완료 되었습니다.";
-		} else {
-			return "인증이 실패하였습니다.";
-		}
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@DeleteMapping("/user/delete")
@@ -55,12 +52,14 @@ public class UserController {
 	}
 
 	@PutMapping("/user/update")
-	public ResponseEntity<?> userUpdate(@RequestBody UserDto.UpdateRequest updateRequest,
-		Errors errors) {
-		if (errors.hasErrors()) {
-			Map<String, String> validResult = userService.validateHandler(errors);
-			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<?> userUpdate(@RequestBody UserDto.UpdateRequest updateRequest
+//		, Errors errors
+	) {
+
+//		if (errors.hasErrors()) {
+//			Map<String, String> validResult = userService.validateHandler(errors);
+//			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
+//		}
 
 		return new ResponseEntity<>(userService.userUpdate(updateRequest), HttpStatus.OK);
 	}

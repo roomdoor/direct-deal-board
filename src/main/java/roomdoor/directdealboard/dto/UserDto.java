@@ -97,14 +97,12 @@ public class UserDto {
 	}
 
 
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	@NoArgsConstructor
-	@Builder
-	public static class DeleteResponse {
-
-	}
+//	@Getter
+//	@Setter
+//	@Builder
+//	public static class DeleteResponse {
+//
+//	}
 
 
 	@Getter
