@@ -49,7 +49,7 @@ class UserControllerTest {
 	@Test
 	public void test_01() throws Exception {
 		//given
-		given(userService.userCreate(any())).willReturn(User.builder()
+		given(userService.userCreate(any())).willReturn(UserDto.Response.builder()
 			.id("ss@ss.com")
 			.userName("이시화")
 			.build());
@@ -80,7 +80,7 @@ class UserControllerTest {
 	@Test
 	public void test_02() throws Exception {
 		//given
-		given(userService.userCreate(any())).willReturn(User.builder()
+		given(userService.userCreate(any())).willReturn(UserDto.Response.builder()
 			.id("ss@ss.com")
 			.userName("이시화")
 			.build());
@@ -109,7 +109,7 @@ class UserControllerTest {
 	@Test
 	public void test_02_02() throws Exception {
 		//given
-		given(userService.userCreate(any())).willReturn(User.builder()
+		given(userService.userCreate(any())).willReturn(UserDto.Response.builder()
 			.id("ss@ss.com")
 			.userName("이시화")
 			.build());
@@ -138,7 +138,7 @@ class UserControllerTest {
 	@Test
 	public void test_02_03() throws Exception {
 		//given
-		given(userService.userCreate(any())).willReturn(User.builder()
+		given(userService.userCreate(any())).willReturn(UserDto.Response.builder()
 			.id("ss@ss.com")
 			.userName("이시화")
 			.build());
@@ -189,7 +189,7 @@ class UserControllerTest {
 	@Test
 	public void test_04() throws Exception {
 		//given
-		given(userService.userDelete(any())).willReturn(User.builder()
+		given(userService.userDelete(any())).willReturn(UserDto.Response.builder()
 			.id("지운 아이디")
 			.build());
 		//when
@@ -230,7 +230,7 @@ class UserControllerTest {
 	@Test
 	public void test_05() throws Exception {
 		//given
-		given(userService.userUpdate(any())).willReturn(User.builder()
+		given(userService.userUpdate(any())).willReturn(UserDto.Response.builder()
 			.id("ss@ss.com")
 			.userName("이시화 업데이트")
 			.build());
@@ -279,10 +279,10 @@ class UserControllerTest {
 	@Test
 	public void test_06() throws Exception {
 		//given
-		List<User> userList = new ArrayList<>();
-		userList.add(User.builder().id("111").build());
-		userList.add(User.builder().id("222").build());
-		userList.add(User.builder().id("333").build());
+		List<UserDto.Response> userList = new ArrayList<>();
+		userList.add(UserDto.Response.builder().id("111").build());
+		userList.add(UserDto.Response.builder().id("222").build());
+		userList.add(UserDto.Response.builder().id("333").build());
 		given(userService.list()).willReturn(userList);
 
 		//when

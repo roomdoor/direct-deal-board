@@ -11,6 +11,10 @@ public enum ErrorCode {
 	SUSPENDED_USER("정지된 회원입니다."),
 	PASSWORD_MISMATCH("비밀번호가 일치하지 않습니다."),
 	EMAIL_CODE_MISMATCH("이메일 코드가 일치하지 않습니다."),
+
+	NOT_FOUND_POSTS("존재하지 않는 글 입니다."),
+
+
 	;
 
 	private final String description;

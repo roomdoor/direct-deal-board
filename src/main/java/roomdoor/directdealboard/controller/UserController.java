@@ -23,7 +23,7 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/user/create")
-	public ResponseEntity<User> userCreate(
+	public ResponseEntity<UserDto.Response> userCreate(
 		@RequestBody @Valid UserDto.CreateRequest createRequest
 //		, Errors errors
 	) {
@@ -44,17 +44,16 @@ public class UserController {
 	}
 
 	@DeleteMapping("/user/delete")
-	public ResponseEntity<User> userDelete(@RequestBody UserDto.DeleteRequest deleteRequest) {
-		User user = userService.userDelete(deleteRequest);
-
-		return new ResponseEntity<>(user, HttpStatus.OK);
+	public ResponseEntity<UserDto.Response> userDelete(
+		@RequestBody UserDto.DeleteRequest deleteRequest) {
+		return new ResponseEntity<>(userService.userDelete(deleteRequest), HttpStatus.OK);
 	}
 
 	@PutMapping("/user/update")
-	public ResponseEntity<User> userUpdate(@RequestBody UserDto.UpdateRequest updateRequest
+	public ResponseEntity<UserDto.Response> userUpdate(
+		@RequestBody UserDto.UpdateRequest updateRequest
 //		, Errors errors
 	) {
-
 //		if (errors.hasErrors()) {
 //			Map<String, String> validResult = userService.validateHandler(errors);
 //			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
@@ -64,9 +63,7 @@ public class UserController {
 	}
 
 	@GetMapping("/user/list")
-	public ResponseEntity<List<User>> userList() {
-		List<User> userList = userService.list();
-
-		return new ResponseEntity<>(userList, HttpStatus.OK);
+	public ResponseEntity<List<UserDto.Response>> userList() {
+		return new ResponseEntity<>(userService.list(), HttpStatus.OK);
 	}
 }

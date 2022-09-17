@@ -1,10 +1,11 @@
 package roomdoor.directdealboard.dto;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import org.springframework.context.annotation.Primary;
 import roomdoor.directdealboard.anotation.NotDuplicateId;
 import roomdoor.directdealboard.anotation.NotDuplicateNickName;
 
@@ -61,7 +62,7 @@ public class UserDto {
 	@AllArgsConstructor
 	@NoArgsConstructor
 	@Builder
-	public static class CreateResponse {
+	public static class Response {
 
 		private String id;
 		private String userName;
@@ -71,15 +72,23 @@ public class UserDto {
 		//	private String rePassword;
 		private String address;
 
-		public static CreateResponse of(UserDto.CreateRequest createRequest) {
-			return CreateResponse.builder()
-				.id(createRequest.getId())
-				.userName(createRequest.getUserName())
-				.nickName(createRequest.getNickName())
-				.phoneNumber(createRequest.getPhoneNumber())
-				.password(createRequest.getPassword())
-				.address(createRequest.getAddress())
+		public static Response of(User user) {
+			return Response.builder()
+				.id(user.getId())
+				.userName(user.getUserName())
+				.nickName(user.getNickName())
+				.phoneNumber(user.getPhoneNumber())
+				.password(user.getPassword())
+				.address(user.getAddress())
 				.build();
+		}
+
+		public static List<Response> of(List<User> userList) {
+			List<Response> list = new ArrayList<>();
+			for (User user : userList) {
+				list.add(Response.of(user));
+			}
+			return list;
 		}
 	}
 

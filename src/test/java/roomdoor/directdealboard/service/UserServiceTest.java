@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.components.MailComponents;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
 import roomdoor.directdealboard.dto.UserDto.DeleteRequest;
+import roomdoor.directdealboard.dto.UserDto.Response;
 import roomdoor.directdealboard.dto.UserDto.UpdateRequest;
 import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.exception.UserException;
@@ -58,7 +59,7 @@ class UserServiceTest {
 		given(mailComponents.sendMail(any(), any(), any())).willReturn(true);
 
 		//when
-		User user = userService.userCreate(createRequest);
+		Response user = userService.userCreate(createRequest);
 
 		//then
 		verify(userRepository, times(1)).save(any());
@@ -117,7 +118,7 @@ class UserServiceTest {
 			.build()));
 
 		//when
-		User user = userService.userDelete(DeleteRequest.builder()
+		Response user = userService.userDelete(DeleteRequest.builder()
 			.id("ss@ss.com")
 			.password("secretNumber")
 			.build());
@@ -167,7 +168,7 @@ class UserServiceTest {
 			.build());
 
 		//when
-		User user = userService.userUpdate(UpdateRequest.builder()
+		Response user = userService.userUpdate(UpdateRequest.builder()
 			.id("ss@ss.com")
 			.password("secretNumber")
 			.userName("update name")
@@ -208,7 +209,7 @@ class UserServiceTest {
 		given(userRepository.findAll()).willReturn(givenList);
 
 		//when
-		List<User> list = userService.list();
+		List<Response> list = userService.list();
 
 		//then
 		assertEquals(2, list.size());

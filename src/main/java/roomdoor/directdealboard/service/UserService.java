@@ -18,6 +18,7 @@ import roomdoor.directdealboard.components.MailComponents;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
 import roomdoor.directdealboard.dto.UserDto.DeleteRequest;
+import roomdoor.directdealboard.dto.UserDto.Response;
 import roomdoor.directdealboard.dto.UserDto.UpdateRequest;
 import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.exception.UserException;
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
 	private final HttpSession session;
 
 
-	public User userCreate(UserDto.CreateRequest createRequest) {
+	public Response userCreate(UserDto.CreateRequest createRequest) {
 
 		String uuid = emailSend(createRequest);
 		String encPassword = BCrypt.hashpw(createRequest.getPassword(), BCrypt.gensalt());
@@ -47,7 +48,7 @@ public class UserService implements UserDetailsService {
 		user.setEmailYn(false);
 		user.setEmailCode(uuid);
 
-		return userRepository.save(user);
+		return UserDto.Response.of(userRepository.save(user));
 	}
 
 	private String emailSend(CreateRequest userCreateRequestDto) {
@@ -86,7 +87,7 @@ public class UserService implements UserDetailsService {
 		}
 	}
 
-	public User userDelete(DeleteRequest deleteRequest) {
+	public Response userDelete(DeleteRequest deleteRequest) {
 		User user = getUser(deleteRequest.getId());
 
 		if (user.getPassword().equals(deleteRequest.getPassword())) {
@@ -95,12 +96,12 @@ public class UserService implements UserDetailsService {
 			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
 
-		return user;
+		return UserDto.Response.of(user);
 	}
 
 
 
-	public User userUpdate(UpdateRequest updateRequest) {
+	public Response userUpdate(UpdateRequest updateRequest) {
 		User user = getUser(updateRequest.getId());
 
 		user.setAddress(updateRequest.getAddress());
@@ -108,11 +109,11 @@ public class UserService implements UserDetailsService {
 		user.setNickName(updateRequest.getNickName());
 		user.setPhoneNumber(updateRequest.getPhoneNumber());
 
-		return userRepository.save(user);
+		return UserDto.Response.of(userRepository.save(user));
 	}
 
-	public List<User> list() {
-		return userRepository.findAll();
+	public List<Response> list() {
+		return Response.of(userRepository.findAll());
 	}
 
 	@Override
