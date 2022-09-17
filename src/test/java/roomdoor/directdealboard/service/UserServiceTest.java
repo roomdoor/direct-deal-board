@@ -175,6 +175,7 @@ class UserServiceTest {
 			.address("update address")
 			.phoneNumber("01022221111")
 			.build());
+		System.out.println(user.toString());
 
 		//then
 		assertEquals(user.getNickName(), "update nickname");

@@ -2,6 +2,7 @@ package roomdoor.directdealboard.exception;
 
 import java.time.LocalDateTime;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 import roomdoor.directdealboard.type.ErrorCode;
 
 @Getter
@@ -9,13 +10,13 @@ import roomdoor.directdealboard.type.ErrorCode;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserException extends RuntimeException{
+public class ApiExceptionEntity {
+
+	private HttpStatus httpStatus;
 
 	private ErrorCode errorCode;
+
 	private String message;
 
-	public UserException(ErrorCode errorCode) {
-		this.errorCode = errorCode;
-		this.message = errorCode.getDescription();
-	}
+	private LocalDateTime timestamp;
 }

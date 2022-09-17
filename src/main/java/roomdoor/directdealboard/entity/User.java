@@ -1,6 +1,7 @@
 package roomdoor.directdealboard.entity;
 
 import java.time.LocalDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -29,7 +30,9 @@ public class User {
 	private String phoneNumber;
 	private String address;
 	private int dealTotalCount;
-	@Enumerated(EnumType.STRING)
+
+	@Enumerated(value = EnumType.STRING)
+	@Column(name = "user_state")
 	private UserState userState;
 
 	private String emailCode;

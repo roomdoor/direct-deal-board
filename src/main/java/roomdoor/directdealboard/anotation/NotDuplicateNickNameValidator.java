@@ -13,6 +13,9 @@ public class NotDuplicateNickNameValidator implements ConstraintValidator<NotDup
 
 	private final UserRepository userRepository;
 
+	@Override
+	public void initialize(NotDuplicateNickName constraintAnnotation) {
+	}
 
 	@Override
 	public boolean isValid(String nickName, ConstraintValidatorContext context) {

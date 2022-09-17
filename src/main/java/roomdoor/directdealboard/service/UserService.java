@@ -1,9 +1,7 @@
 package roomdoor.directdealboard.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
 import roomdoor.directdealboard.components.MailComponents;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;

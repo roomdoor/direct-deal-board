@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,7 @@ public class UserController {
 	private final UserService userService;
 
 	@PostMapping("/user/create")
-	public ResponseEntity<?> userCreate(
+	public ResponseEntity<User> userCreate(
 		@RequestBody @Valid UserDto.CreateRequest createRequest
 //		, Errors errors
 	) {
@@ -45,14 +44,14 @@ public class UserController {
 	}
 
 	@DeleteMapping("/user/delete")
-	public ResponseEntity<?> userDelete(@RequestBody UserDto.DeleteRequest deleteRequest) {
+	public ResponseEntity<User> userDelete(@RequestBody UserDto.DeleteRequest deleteRequest) {
 		User user = userService.userDelete(deleteRequest);
 
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@PutMapping("/user/update")
-	public ResponseEntity<?> userUpdate(@RequestBody UserDto.UpdateRequest updateRequest
+	public ResponseEntity<User> userUpdate(@RequestBody UserDto.UpdateRequest updateRequest
 //		, Errors errors
 	) {
 
@@ -65,7 +64,7 @@ public class UserController {
 	}
 
 	@GetMapping("/user/list")
-	public ResponseEntity<?> userList() {
+	public ResponseEntity<List<User>> userList() {
 		List<User> userList = userService.list();
 
 		return new ResponseEntity<>(userList, HttpStatus.OK);

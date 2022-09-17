@@ -13,6 +13,9 @@ public class NotDuplicateIdValidator implements ConstraintValidator<NotDuplicate
 
 	private final UserRepository userRepository;
 
+	@Override
+	public void initialize(NotDuplicateId constraintAnnotation) {
+	}
 
 	@Override
 	public boolean isValid(String id, ConstraintValidatorContext context) {
