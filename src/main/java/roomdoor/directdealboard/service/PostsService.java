@@ -66,6 +66,11 @@ public class PostsService {
 		}
 
 		Posts posts = optionalPosts.get();
+
+		if (posts.getWriterId().equals(updateRequest.getWriter())) {
+			throw new PostsException(ErrorCode.MISMATCH_WRITER);
+		}
+
 		posts.setTitle(updateRequest.getTitle());
 		posts.setText(updateRequest.getText());
 
@@ -73,7 +78,7 @@ public class PostsService {
 	}
 
 
-	public void delete(DeleteRequest deleteRequest) {
+	public boolean delete(DeleteRequest deleteRequest) {
 		Optional<Posts> optionalPosts = postsRepository.findById(deleteRequest.getId());
 
 		if (!optionalPosts.isPresent()) {
@@ -92,5 +97,6 @@ public class PostsService {
 
 
 		postsRepository.delete(optionalPosts.get());
+		return true;
 	}
 }

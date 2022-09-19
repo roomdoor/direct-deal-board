@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import roomdoor.directdealboard.dto.PostsDto;
-import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.service.PostsService;
 
 @RestController
@@ -43,7 +42,7 @@ public class PostsController {
 
 	@PutMapping("/posts/update")
 	public ResponseEntity<PostsDto.Response> update(
-		@RequestBody PostsDto.UpdateRequest updateRequest) {
+		@RequestBody @Valid PostsDto.UpdateRequest updateRequest) {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(postsService.update(updateRequest));
 	}

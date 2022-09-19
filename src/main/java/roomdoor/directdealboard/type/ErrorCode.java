@@ -14,6 +14,8 @@ public enum ErrorCode {
 
 	NOT_FOUND_POSTS("존재하지 않는 글 입니다."),
 
+	MISMATCH_WRITER("글 작성자가 아닙니다."),
+
 
 	;
 

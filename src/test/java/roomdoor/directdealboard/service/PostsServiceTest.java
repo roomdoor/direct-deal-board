@@ -124,6 +124,7 @@ class PostsServiceTest {
 	public void test_04() {
 		//given
 		given(postsRepository.findById(any())).willReturn(Optional.of(Posts.builder()
+			.writerId("lee연주")
 			.writer("이연주")
 			.title("멍때리는 중")
 			.text("아 시험지도 다 점검했고 수행평가 채점도 다 했는데 시화는 아직 공부중이다 방해하지말고 멍떄려야지...")
@@ -131,7 +132,9 @@ class PostsServiceTest {
 			.likeCount(0L)
 			.categories(new ArrayList<>())
 			.build()));
+
 		given(postsRepository.save(any())).willReturn(Posts.builder()
+			.id(1L)
 			.writer("이연주")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
@@ -142,6 +145,7 @@ class PostsServiceTest {
 
 		//when
 		Response posts = postsService.update(UpdateRequest.builder()
+			.id(1L)
 			.writer("이연주")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")

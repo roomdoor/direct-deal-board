@@ -42,4 +42,17 @@ public class GlobalExceptionHandler {
 				.build());
 	}
 
+	@ExceptionHandler(PostsException.class)
+	public ResponseEntity<?> handlerUserException(PostsException e) {
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(ApiExceptionEntity.builder()
+				.httpStatus(HttpStatus.BAD_REQUEST)
+				.errorCode(e.getErrorCode())
+				.message(e.getMessage())
+				.timestamp(LocalDateTime.now())
+				.build());
+	}
+
 }
