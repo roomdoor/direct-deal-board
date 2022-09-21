@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import roomdoor.directdealboard.dto.UserDto;
@@ -18,11 +19,12 @@ import roomdoor.directdealboard.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
 
 	private final UserService userService;
 
-	@PostMapping("/user/create")
+	@PostMapping("/create")
 	public ResponseEntity<UserDto.Response> userCreate(
 		@RequestBody @Valid UserDto.CreateRequest createRequest
 //		, Errors errors
@@ -36,20 +38,20 @@ public class UserController {
 		return new ResponseEntity<>(userService.userCreate(createRequest), HttpStatus.CREATED);
 	}
 
-	@GetMapping("/user/email-auth")
+	@GetMapping("/email-auth")
 	public ResponseEntity<?> emailAuth(@RequestParam String uuid, @RequestParam String email) {
 		userService.emailAuth(uuid, email);
 
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	@DeleteMapping("/user/delete")
+	@DeleteMapping("/delete")
 	public ResponseEntity<UserDto.Response> userDelete(
 		@RequestBody UserDto.DeleteRequest deleteRequest) {
 		return new ResponseEntity<>(userService.userDelete(deleteRequest), HttpStatus.OK);
 	}
 
-	@PutMapping("/user/update")
+	@PutMapping("/update")
 	public ResponseEntity<UserDto.Response> userUpdate(
 		@RequestBody UserDto.UpdateRequest updateRequest
 //		, Errors errors
@@ -62,7 +64,7 @@ public class UserController {
 		return new ResponseEntity<>(userService.userUpdate(updateRequest), HttpStatus.OK);
 	}
 
-	@GetMapping("/user/list")
+	@GetMapping("/list")
 	public ResponseEntity<List<UserDto.Response>> userList() {
 		return new ResponseEntity<>(userService.list(), HttpStatus.OK);
 	}

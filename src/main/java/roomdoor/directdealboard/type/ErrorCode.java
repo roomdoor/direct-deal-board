@@ -12,10 +12,15 @@ public enum ErrorCode {
 	PASSWORD_MISMATCH("비밀번호가 일치하지 않습니다."),
 	EMAIL_CODE_MISMATCH("이메일 코드가 일치하지 않습니다."),
 
+
+
 	NOT_FOUND_POSTS("존재하지 않는 글 입니다."),
 
 	MISMATCH_WRITER("글 작성자가 아닙니다."),
 
+
+
+	NOT_FOUND_COMMENTS("존재하지 않는 댓글 입니다.")
 
 	;
 

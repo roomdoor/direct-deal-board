@@ -19,6 +19,7 @@ public class Comments {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
+	private Long postsId;
 	private String comments;
 	private String writer;
 	private Long likeCount;

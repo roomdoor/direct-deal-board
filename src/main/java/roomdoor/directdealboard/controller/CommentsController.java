@@ -13,45 +13,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import roomdoor.directdealboard.dto.PostsDto;
-import roomdoor.directdealboard.service.PostsService;
+import roomdoor.directdealboard.dto.CommentsDto;
+import roomdoor.directdealboard.dto.CommentsDto.Response;
+import roomdoor.directdealboard.service.CommentsService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts")
-public class PostsController {
+@RequestMapping("/comments")
+public class CommentsController {
 
-	private final PostsService postsService;
+	private final CommentsService commentsService;
 
 	@GetMapping("/get")
-	public ResponseEntity<PostsDto.Response> getPosts(@RequestParam Long id) {
-
+	public ResponseEntity<CommentsDto.Response> getComments(@RequestParam Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(postsService.getPosts(id));
+			.body(CommentsDto.Response.of(commentsService.getComment(id)));
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<List<PostsDto.Response>> list() {
+	public ResponseEntity<List<Response>> list(@RequestParam Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(postsService.list());
+			.body(Response.of(commentsService.list(id)));
 	}
 
 	@PostMapping("/create")
 	public ResponseEntity<?> create(
-		@RequestBody @Valid PostsDto.CreateRequest createRequest) {
-		return new ResponseEntity<>(postsService.create(createRequest), HttpStatus.CREATED);
+		@RequestBody @Valid CommentsDto.CreateRequest createRequest) {
+		return new ResponseEntity<>(commentsService.create(createRequest), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/update")
-	public ResponseEntity<PostsDto.Response> update(
-		@RequestBody @Valid PostsDto.UpdateRequest updateRequest) {
+	public ResponseEntity<CommentsDto.Response> update(
+		@RequestBody @Valid CommentsDto.UpdateRequest updateRequest) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(postsService.update(updateRequest));
+			.body(CommentsDto.Response.of(commentsService.update(updateRequest)));
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<?> delete(@RequestBody PostsDto.DeleteRequest deleteRequest) {
-		postsService.delete(deleteRequest);
+	public ResponseEntity<?> delete(@RequestBody CommentsDto.DeleteRequest deleteRequest) {
+		commentsService.delete(deleteRequest);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }
