@@ -17,6 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.components.MailComponents;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
@@ -32,6 +34,8 @@ import roomdoor.directdealboard.repository.UserRepository;
 class UserServiceTest {
 
 
+	@Mock
+	private BCryptPasswordEncoder passwordEncoder;
 	@Mock
 	private UserRepository userRepository;
 
@@ -117,6 +121,8 @@ class UserServiceTest {
 			.emailCode("qwer1234")
 			.build()));
 
+		given(passwordEncoder.matches(any(), any())).willReturn(true);
+
 		//when
 		Response user = userService.userDelete(DeleteRequest.builder()
 			.id("ss@ss.com")
@@ -141,6 +147,7 @@ class UserServiceTest {
 			.emailCode("qwer1234")
 			.build()));
 
+		given(passwordEncoder.matches(any(), any())).willReturn(false);
 		//when
 
 		//then
@@ -157,6 +164,8 @@ class UserServiceTest {
 		given(userRepository.findById((any()))).willReturn(Optional.of(User.builder()
 			.id("ss@ss.com")
 			.build()));
+
+		given(passwordEncoder.matches(any(), any())).willReturn(true);
 
 		given(userRepository.save(any())).willReturn(User.builder()
 			.id("ss@ss.com")
@@ -176,13 +185,35 @@ class UserServiceTest {
 			.address("update address")
 			.phoneNumber("01022221111")
 			.build());
-		System.out.println(user.toString());
 
 		//then
 		assertEquals(user.getNickName(), "update nickname");
 		assertEquals(user.getUserName(), "update name");
 		assertEquals(user.getAddress(), "update address");
 		assertEquals(user.getPhoneNumber(), "01022221111");
+	}
+
+	@DisplayName("06_01. user update fail password mismatch")
+	@Test
+	public void test_06_01() {
+		//given
+		given(userRepository.findById((any()))).willReturn(Optional.of(User.builder()
+			.id("ss@ss.com")
+			.build()));
+
+		given(passwordEncoder.matches(any(), any())).willReturn(false);
+
+		//when
+		assertThrows(UserException.class, () -> userService.userUpdate(UpdateRequest.builder()
+			.id("ss@ss.com")
+			.password("secretNumber")
+			.userName("update name")
+			.nickName("update nickname")
+			.address("update address")
+			.phoneNumber("01022221111")
+			.build()));
+
+		//then
 	}
 
 	@DisplayName("07. list")
@@ -215,7 +246,5 @@ class UserServiceTest {
 		assertEquals(2, list.size());
 		assertEquals("ss@ss.com", list.get(1).getId());
 		assertEquals("aa@ss.com", list.get(0).getId());
-
 	}
-
 }

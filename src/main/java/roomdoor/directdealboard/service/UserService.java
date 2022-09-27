@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import roomdoor.directdealboard.components.MailComponents;
 import roomdoor.directdealboard.dto.UserDto;
@@ -34,7 +35,7 @@ public class UserService implements UserDetailsService {
 
 	private final MailComponents mailComponents;
 
-	private final HttpSession session;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
 	public Response userCreate(UserDto.CreateRequest createRequest) {
@@ -64,16 +65,6 @@ public class UserService implements UserDetailsService {
 		return uuid;
 	}
 
-//	public Map<String, String> validateHandler(Errors errors) {
-//		Map<String, String> result = new HashMap<>();
-//
-//		for (FieldError error : errors.getFieldErrors()) {
-//			result.put(error.getField(), error.getDefaultMessage());
-//		}
-//
-//		return result;
-//	}
-
 	public boolean emailAuth(String uuid, String email) {
 		User user = getUser(email);
 
@@ -89,20 +80,20 @@ public class UserService implements UserDetailsService {
 
 	public Response userDelete(DeleteRequest deleteRequest) {
 		User user = getUser(deleteRequest.getId());
-
-		if (user.getPassword().equals(deleteRequest.getPassword())) {
-			userRepository.deleteById(deleteRequest.getId());
-		} else {
+		if (!bCryptPasswordEncoder.matches(deleteRequest.getPassword(), user.getPassword())) {
 			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
+		userRepository.deleteById(deleteRequest.getId());
 
 		return UserDto.Response.of(user);
 	}
 
 
-
 	public Response userUpdate(UpdateRequest updateRequest) {
 		User user = getUser(updateRequest.getId());
+		if (!bCryptPasswordEncoder.matches(updateRequest.getPassword(), user.getPassword())) {
+			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
+		}
 
 		user.setAddress(updateRequest.getAddress());
 		user.setUserName(updateRequest.getUserName());
@@ -134,8 +125,6 @@ public class UserService implements UserDetailsService {
 		if (user.getUserState() == UserState.ADMIN) {
 			grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 		}
-
-		session.setAttribute("user", UserDto.SessionDto.of(user));
 
 		return new org.springframework.security.core.userdetails.User(user.getId(),
 			user.getPassword(), grantedAuthorities);

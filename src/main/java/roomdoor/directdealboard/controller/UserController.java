@@ -53,13 +53,7 @@ public class UserController {
 
 	@PutMapping("/update")
 	public ResponseEntity<UserDto.Response> userUpdate(
-		@RequestBody UserDto.UpdateRequest updateRequest
-//		, Errors errors
-	) {
-//		if (errors.hasErrors()) {
-//			Map<String, String> validResult = userService.validateHandler(errors);
-//			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
-//		}
+		@RequestBody UserDto.UpdateRequest updateRequest) {
 
 		return new ResponseEntity<>(userService.userUpdate(updateRequest), HttpStatus.OK);
 	}
