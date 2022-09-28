@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -157,20 +158,20 @@ class UserControllerTest {
 			.andDo(print());
 	}
 
-	@DisplayName("03_01. /user/email-auth success")
+	@DisplayName("03_01. /user/create/email-auth success")
 	@Test
 	public void test_03_01() throws Exception {
 		//given
 		given(userService.emailAuthWhenCreate(any(), any())).willReturn(true);
 		//when
 		//then
-		mvc.perform(get("/user/email-auth?uuid=1111&email=sihwa95@naver.com")
+		mvc.perform(get("/user/create/email-auth?uuid=1111&email=sihwa95@naver.com")
 				.contentType(MediaType.APPLICATION_JSON)
 			).andExpect(status().isOk())
 			.andDo(print());
 	}
 
-	@DisplayName("03_02. /user/email-auth fail ")
+	@DisplayName("03_02. /user/create/email-auth fail ")
 	@Test
 	public void test_03_02() throws Exception {
 		//given
@@ -179,7 +180,7 @@ class UserControllerTest {
 		//when
 
 		//then
-		mvc.perform(get("/user/email-auth?uuid=1111&email=sihwa95@naver.com")
+		mvc.perform(get("/user/create/email-auth?uuid=1111&email=sihwa95@naver.com")
 			).andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.errorCode").value("EMAIL_CODE_MISMATCH"))
 			.andDo(print());
@@ -241,7 +242,6 @@ class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(UserDto.UpdateRequest.builder()
 					.id("ss@ss.com")
-					.userName("이시화 업데이트")
 					.nickName("room")
 					.password("qwe12344@@")
 					.phoneNumber("01011112222")
@@ -265,10 +265,10 @@ class UserControllerTest {
 		//when
 
 		mvc.perform(put("/user/update")
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(UserDto.UpdateRequest.builder()
-				.id("ss@ss.com")
-				.build())))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(UserDto.UpdateRequest.builder()
+					.id("ss@ss.com")
+					.build())))
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.errorCode").value("NOT_FOUND_USER"));
 
@@ -297,7 +297,7 @@ class UserControllerTest {
 	@DisplayName("07_00. /user/get/posts")
 	@Test
 	public void test_07_00() throws Exception {
-	    //given
+		//given
 		List<PostsDto.Response> postsList = new ArrayList<>();
 		postsList.add(PostsDto.Response.builder().build());
 		postsList.add(PostsDto.Response.builder().build());
@@ -308,7 +308,7 @@ class UserControllerTest {
 		mvc.perform(get("/user/get/posts?id=1"))
 			.andExpect(jsonPath("$.length()").value(3))
 			.andDo(print());
-	    //then
+		//then
 	}
 
 	@DisplayName("08_00. /user/get/comments")
@@ -325,6 +325,41 @@ class UserControllerTest {
 		//when
 		mvc.perform(get("/user/get/comments?id=1"))
 			.andExpect(jsonPath("$.length()").value(4))
+			.andDo(print());
+		//then
+	}
+
+	@DisplayName("09_00. /user/password-reset-request")
+	@Test
+	public void test_09_00() throws Exception {
+		//given
+		given(userService.passwordReset(any(), any())).willReturn(
+			"비밀번호 초기화 인증 메일이 발송되었습니다. 이메일에서 인증링크를 통해 비밀번호를 초기화해주세요.");
+
+		//when
+		mvc.perform(post("/user/password-reset-request")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(
+					UserDto.PasswordResetDto.builder()
+						.userId("ss@ss.com")
+						.userName("이름")
+						.build())))
+			.andExpect(status().isOk())
+			.andDo(print());
+
+		//then
+	}
+
+	@DisplayName("10_00. /password-reset/email-auth")
+	@Test
+	public void test_01_00() throws Exception {
+		//given
+		given(userService.passwordReset(any(), any())).willReturn("<p> 초기화된 비밀번호를 메일로 전송하였습니다.<p>" +
+			"<p>로그인 후 비밀번호를 변경해 주세요</p>");
+
+		//when
+		mvc.perform(get("/user/password-reset/email-auth?uuid=1234qwer&email=ss@ss.com"))
+			.andExpect(status().isOk())
 			.andDo(print());
 		//then
 	}

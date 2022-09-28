@@ -24,6 +24,7 @@ import roomdoor.directdealboard.dto.CommentsDto;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
 import roomdoor.directdealboard.dto.UserDto.DeleteRequest;
+import roomdoor.directdealboard.dto.UserDto.PasswordResetDto;
 import roomdoor.directdealboard.dto.UserDto.Response;
 import roomdoor.directdealboard.dto.UserDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Comments;
@@ -183,7 +184,6 @@ class UserServiceTest {
 		Response user = userService.userUpdate(UpdateRequest.builder()
 			.id("ss@ss.com")
 			.password("secretNumber")
-			.userName("update name")
 			.nickName("update nickname")
 			.address("update address")
 			.phoneNumber("01022221111")
@@ -210,7 +210,6 @@ class UserServiceTest {
 		assertThrows(UserException.class, () -> userService.userUpdate(UpdateRequest.builder()
 			.id("ss@ss.com")
 			.password("secretNumber")
-			.userName("update name")
 			.nickName("update nickname")
 			.address("update address")
 			.phoneNumber("01022221111")
@@ -253,8 +252,8 @@ class UserServiceTest {
 
 	@DisplayName("07_00. user get all posts")
 	@Test
-	public void test_07_00(){
-	    //given
+	public void test_07_00() {
+		//given
 		List<Posts> postsList = new ArrayList<>();
 		postsList.add(Posts.builder().build());
 		postsList.add(Posts.builder().build());
@@ -263,7 +262,7 @@ class UserServiceTest {
 		postsList.add(Posts.builder().build());
 		given(userRepository.findById(any())).willReturn(
 			Optional.of(User.builder().id("11").postsList(postsList).build()));
-	    //when
+		//when
 		List<PostsDto.Response> allPosts = userService.getAllPosts("11");
 		//then
 		assertEquals(allPosts.size(), 5);
@@ -272,7 +271,7 @@ class UserServiceTest {
 
 	@DisplayName("08_00. user get all comments")
 	@Test
-	public void test_08_00(){
+	public void test_08_00() {
 		//given
 		List<Comments> commentsList = new ArrayList<>();
 		commentsList.add(Comments.builder().build());
@@ -285,6 +284,88 @@ class UserServiceTest {
 		List<CommentsDto.Response> allPosts = userService.getAllComments("11");
 		//then
 		assertEquals(allPosts.size(), 4);
-
 	}
+
+	@DisplayName("09_00. passwordResetRequest success")
+	@Test
+	public void test_09_00() {
+		//given
+		given(userRepository.findById(any()))
+			.willReturn(Optional.of(User.builder()
+				.id("ss@ss.com")
+				.userName("테스터")
+				.build()));
+
+		given(userRepository.save(any())).willReturn(any());
+
+		//when
+		String result = userService.passwordResetRequest(PasswordResetDto.builder()
+			.userId("ss@ss.com")
+			.userName("테스터")
+			.build());
+
+		//then
+		assertEquals(result,
+			"비밀번호 초기화 인증 메일이 발송되었습니다. 이메일에서 인증링크를 통해 비밀번호를 초기화해주세요.");
+	}
+
+	@DisplayName("09_01. passwordResetRequest fail misMatch name id")
+	@Test
+	public void test_09_01() {
+		//given
+		given(userRepository.findById(any()))
+			.willReturn(Optional.of(User.builder()
+				.id("ss@ss.com")
+				.userName("실전용")
+				.build()));
+
+		//when
+		assertThrows(UserException.class,
+			() -> userService.passwordResetRequest(PasswordResetDto.builder()
+				.userId("ss@ss.com")
+				.userName("테스터")
+				.build()));
+
+		//then
+	}
+
+	@DisplayName("10_00. passwordReset success")
+	@Test
+	public void test_10_00() {
+		//given
+		given(userRepository.findById(any()))
+			.willReturn(Optional.of(User.builder()
+				.id("ss@ss.com")
+				.userName("실전용")
+				.passwordResetYn(true)
+				.passwordResetCode("1234qwer")
+				.build()));
+
+		//when
+		String result = userService.passwordReset("1234qwer", "ss@ss.com");
+
+		//then
+		assertEquals(result, "<p> 초기화된 비밀번호를 메일로 전송하였습니다.<p>" +
+			"<p>로그인 후 비밀번호를 변경해 주세요</p>");
+	}
+
+	@DisplayName("10_01. passwordReset fail ")
+	@Test
+	public void test_10_01() {
+		//given
+		given(userRepository.findById(any()))
+			.willReturn(Optional.of(User.builder()
+				.id("ss@ss.com")
+				.userName("실전용")
+				.passwordResetYn(false)
+				.passwordResetCode("1234qwer")
+				.build()));
+
+		//when
+		assertThrows(UserException.class, () -> userService.passwordReset("1234qwer", "ss@ss.com"));
+
+		//then
+	}
+
+
 }
