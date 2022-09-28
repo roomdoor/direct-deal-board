@@ -16,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.components.MailComponents;
+import roomdoor.directdealboard.dto.CommentsDto;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
@@ -49,6 +50,13 @@ public class UserService implements UserDetailsService {
 		User user = getUser(id);
 		return PostsDto.Response.of(user.getPostsList());
 	}
+
+	@Transactional
+	public List<CommentsDto.Response> getAllComments(String id) {
+		User user = getUser(id);
+		return CommentsDto.Response.of(user.getCommentsList());
+	}
+
 
 	public Response userCreate(UserDto.CreateRequest createRequest) {
 

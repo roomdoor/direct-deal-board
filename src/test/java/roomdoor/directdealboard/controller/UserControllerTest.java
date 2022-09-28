@@ -21,6 +21,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import roomdoor.directdealboard.dto.CommentsDto;
+import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.UserRepository;
@@ -289,6 +291,41 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.length()").value(3))
 			.andDo(print());
 
+		//then
+	}
+
+	@DisplayName("07_00. /user/get/posts")
+	@Test
+	public void test_07_00() throws Exception {
+	    //given
+		List<PostsDto.Response> postsList = new ArrayList<>();
+		postsList.add(PostsDto.Response.builder().build());
+		postsList.add(PostsDto.Response.builder().build());
+		postsList.add(PostsDto.Response.builder().build());
+		given(userService.getAllPosts(any())).willReturn(postsList);
+
+		//when
+		mvc.perform(get("/user/get/posts?id=1"))
+			.andExpect(jsonPath("$.length()").value(3))
+			.andDo(print());
+	    //then
+	}
+
+	@DisplayName("08_00. /user/get/comments")
+	@Test
+	public void test_08_00() throws Exception {
+		//given
+		List<CommentsDto.Response> commentsList = new ArrayList<>();
+		commentsList.add(CommentsDto.Response.builder().build());
+		commentsList.add(CommentsDto.Response.builder().build());
+		commentsList.add(CommentsDto.Response.builder().build());
+		commentsList.add(CommentsDto.Response.builder().build());
+		given(userService.getAllComments(any())).willReturn(commentsList);
+
+		//when
+		mvc.perform(get("/user/get/comments?id=1"))
+			.andExpect(jsonPath("$.length()").value(4))
+			.andDo(print());
 		//then
 	}
 }

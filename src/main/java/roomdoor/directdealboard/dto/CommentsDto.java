@@ -28,14 +28,15 @@ public class CommentsDto {
 
 		private long id;
 		private String comments;
-		private String writer;
+		private String writerNickName;
+
 		private Long likeCount;
 
 		public static Response of(Comments comments) {
 			return Response.builder()
 				.id(comments.getId())
 				.comments(comments.getComments())
-				.writer(comments.getWriter())
+				.writerNickName(comments.getWriterNickName())
 				.likeCount(comments.getLikeCount())
 				.build();
 		}
@@ -71,7 +72,12 @@ public class CommentsDto {
 		private String comments;
 
 		@NotNull
-		private String writer;
+		@NotEmpty
+		private String writerNickName;
+
+		@NotNull
+		@NotEmpty
+		private String userId;
 	}
 
 
@@ -90,7 +96,16 @@ public class CommentsDto {
 		private String comments;
 
 		@NotNull
-		private String writer;
+		@NotEmpty
+		private String writerNickName;
+
+		@NotNull
+		@NotEmpty
+		private String userId;
+
+		@NotNull
+		@NotEmpty
+		private String userPassword;
 	}
 
 
@@ -104,7 +119,14 @@ public class CommentsDto {
 		private Long id;
 		private Long postsId;
 
-		private String writer;
-		private String writerPassword;
+		@NotNull
+		@NotEmpty
+		private String writerNickName;
+		@NotNull
+		@NotEmpty
+		private String userId;
+		@NotNull
+		@NotEmpty
+		private String userPassword;
 	}
 }

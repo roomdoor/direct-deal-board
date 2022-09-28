@@ -3,6 +3,7 @@ package roomdoor.directdealboard.service;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.PostsDto.CreateRequest;
@@ -28,13 +29,14 @@ public class PostsService {
 
 	private final CommentsRepository commentsRepository;
 
+	private final BCryptPasswordEncoder passwordEncoder;
+
 	public Response getPosts(Long id) {
 		Optional<Posts> optionalPosts = postsRepository.findById(id);
 
 		if (!optionalPosts.isPresent()) {
 			throw new PostsException(ErrorCode.NOT_FOUND_POSTS);
 		}
-
 
 		Posts posts = optionalPosts.get();
 		posts.setViews(posts.getViews() + 1);
@@ -72,9 +74,17 @@ public class PostsService {
 
 		Posts posts = optionalPosts.get();
 
-		if (posts.getUserId().equals(updateRequest.getWriterNickName())) {
-			throw new PostsException(ErrorCode.MISMATCH_WRITER);
+		Optional<User> optionalUser = userRepository.findById(updateRequest.getUserId());
+		if (!optionalUser.isPresent()) {
+			throw new UserException(ErrorCode.NOT_FOUND_USER);
 		}
+
+		User user = optionalUser.get();
+		if (!passwordEncoder.matches(updateRequest.getUserPassword(), user.getPassword())) {
+			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
+		}
+
+
 
 		posts.setTitle(updateRequest.getTitle());
 		posts.setText(updateRequest.getText());
@@ -96,10 +106,9 @@ public class PostsService {
 		}
 
 		User user = optionalUser.get();
-		if (!user.getPassword().equals(deleteRequest.getUserPassword())) {
+		if (!passwordEncoder.matches(deleteRequest.getUserPassword(), user.getPassword())) {
 			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
-
 
 		postsRepository.delete(optionalPosts.get());
 		return true;

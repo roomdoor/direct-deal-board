@@ -3,6 +3,7 @@ package roomdoor.directdealboard.dto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -38,9 +39,11 @@ public class PostsDto {
 		private Category category;
 
 		@NotNull
+		@NotEmpty
 		private String writerNickName;
 
 		@NotNull
+		@NotEmpty
 		private String userId;
 	}
 
@@ -62,14 +65,20 @@ public class PostsDto {
 		@NotBlank(message = "글 내용은 필수 입력 값입니다.")
 		private String text;
 
-
+		@NotNull
 		private Category category;
 
 		@NotNull
+		@NotEmpty
 		private String writerNickName;
 
 		@NotNull
+		@NotEmpty
 		private String userId;
+
+		@NotNull
+		@NotEmpty
+		private String userPassword;
 	}
 
 	@Getter
@@ -81,8 +90,12 @@ public class PostsDto {
 
 		private Long id;
 
+		@NotNull
+		@NotEmpty
 		private String userId;
 
+		@NotNull
+		@NotEmpty
 		private String userPassword;
 	}
 

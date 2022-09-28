@@ -20,10 +20,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.components.MailComponents;
+import roomdoor.directdealboard.dto.CommentsDto;
+import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
 import roomdoor.directdealboard.dto.UserDto.DeleteRequest;
 import roomdoor.directdealboard.dto.UserDto.Response;
 import roomdoor.directdealboard.dto.UserDto.UpdateRequest;
+import roomdoor.directdealboard.entity.Comments;
+import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.UserRepository;
@@ -245,5 +249,42 @@ class UserServiceTest {
 		assertEquals(2, list.size());
 		assertEquals("ss@ss.com", list.get(1).getId());
 		assertEquals("aa@ss.com", list.get(0).getId());
+	}
+
+	@DisplayName("07_00. user get all posts")
+	@Test
+	public void test_07_00(){
+	    //given
+		List<Posts> postsList = new ArrayList<>();
+		postsList.add(Posts.builder().build());
+		postsList.add(Posts.builder().build());
+		postsList.add(Posts.builder().build());
+		postsList.add(Posts.builder().build());
+		postsList.add(Posts.builder().build());
+		given(userRepository.findById(any())).willReturn(
+			Optional.of(User.builder().id("11").postsList(postsList).build()));
+	    //when
+		List<PostsDto.Response> allPosts = userService.getAllPosts("11");
+		//then
+		assertEquals(allPosts.size(), 5);
+
+	}
+
+	@DisplayName("08_00. user get all comments")
+	@Test
+	public void test_08_00(){
+		//given
+		List<Comments> commentsList = new ArrayList<>();
+		commentsList.add(Comments.builder().build());
+		commentsList.add(Comments.builder().build());
+		commentsList.add(Comments.builder().build());
+		commentsList.add(Comments.builder().build());
+		given(userRepository.findById(any())).willReturn(
+			Optional.of(User.builder().id("11").commentsList(commentsList).build()));
+		//when
+		List<CommentsDto.Response> allPosts = userService.getAllComments("11");
+		//then
+		assertEquals(allPosts.size(), 4);
+
 	}
 }

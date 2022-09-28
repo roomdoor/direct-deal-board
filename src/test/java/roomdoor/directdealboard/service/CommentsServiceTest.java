@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import roomdoor.directdealboard.dto.CommentsDto.DeleteRequest;
 import roomdoor.directdealboard.dto.CommentsDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Comments;
@@ -34,6 +35,9 @@ class CommentsServiceTest {
 	@Mock
 	private UserRepository userRepository;
 
+	@Mock
+	private BCryptPasswordEncoder passwordEncoder;
+
 	@InjectMocks
 	private CommentsService commentsService;
 
@@ -45,7 +49,8 @@ class CommentsServiceTest {
 			Optional.of(Comments.builder()
 				.id(1L)
 				.comments("comments test")
-				.writer("tester")
+				.writerNickName("tester")
+				.userId("ss@ss.com")
 				.build()));
 		//when
 		Comments comment = commentsService.getComment(1L);
@@ -53,7 +58,7 @@ class CommentsServiceTest {
 		//then
 		assertEquals(comment.getId(), 1L);
 		assertEquals(comment.getComments(), "comments test");
-		assertEquals(comment.getWriter(), "tester");
+		assertEquals(comment.getWriterNickName(), "tester");
 	}
 
 	@DisplayName("01_01. get comments fail")
@@ -101,6 +106,9 @@ class CommentsServiceTest {
 			.comments("update")
 			.build());
 
+		given(userRepository.findById(any())).willReturn(Optional.of(User.builder().build()));
+
+		given(passwordEncoder.matches(any(), any())).willReturn(true);
 		//when
 		Comments update = commentsService.update(UpdateRequest.builder()
 			.comments("update").build());
@@ -129,7 +137,8 @@ class CommentsServiceTest {
 		//given
 		given(commentsRepository.findByPostsIdAndId(any(), any())).willReturn(
 			Optional.of(Comments.builder()
-				.writer("ss@ss.com")
+				.writerNickName("room")
+				.userId("ss@ss.com")
 				.build()));
 
 		given(userRepository.findById(any())).willReturn(Optional.of(User.builder()
@@ -138,8 +147,9 @@ class CommentsServiceTest {
 
 		//when
 		boolean result = commentsService.delete(DeleteRequest.builder()
-			.writer("ss@ss.com")
-			.writerPassword("pppp")
+			.userId("ss@ss.com")
+			.writerNickName("room")
+			.userPassword("pppp")
 			.build());
 
 		//then
@@ -155,8 +165,8 @@ class CommentsServiceTest {
 
 		//when
 		assertThrows(CommentsException.class, () -> commentsService.delete(DeleteRequest.builder()
-			.writer("ss@ss.com")
-			.writerPassword("pppp")
+			.writerNickName("ss@ss.com")
+			.userPassword("pppp")
 			.build()));
 
 		//then
@@ -168,7 +178,8 @@ class CommentsServiceTest {
 		//given
 		given(commentsRepository.findByPostsIdAndId(any(), any())).willReturn(
 			Optional.of(Comments.builder()
-				.writer("ss@ss.com")
+					.writerNickName("ss@ss.com")
+				.userId("ss@ss.com")
 				.build()));
 
 		given(userRepository.findById(any())).willThrow(
@@ -176,8 +187,8 @@ class CommentsServiceTest {
 
 		//when
 		assertThrows(UserException.class, () -> commentsService.delete(DeleteRequest.builder()
-			.writer("ss@ss.com")
-			.writerPassword("pppp")
+			.writerNickName("ss@ss.com")
+			.userPassword("pppp")
 			.build()));
 
 		//then
@@ -189,7 +200,8 @@ class CommentsServiceTest {
 //given
 		given(commentsRepository.findByPostsIdAndId(any(), any())).willReturn(
 			Optional.of(Comments.builder()
-				.writer("ss@ss.com")
+					.writerNickName("ss@ss.com")
+				.userId("ss@ss.com")
 				.build()));
 
 		given(userRepository.findById(any())).willReturn(Optional.of(User.builder()
@@ -198,8 +210,8 @@ class CommentsServiceTest {
 
 		//when
 		assertThrows(CommentsException.class, () -> commentsService.delete(DeleteRequest.builder()
-			.writer("ss@ss.com")
-			.writerPassword("pppp")
+			.writerNickName("ss@ss.com")
+			.userPassword("pppp")
 			.build()));
 
 		//then

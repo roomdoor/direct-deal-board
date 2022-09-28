@@ -51,7 +51,7 @@ class CommentsControllerTest {
 		//given
 		given(commentsService.getComment(any())).willReturn(Comments.builder()
 			.id(1L)
-			.writer("tester")
+			.writerNickName("tester")
 			.comments("test comments")
 			.likeCount(0L)
 			.build());
@@ -60,7 +60,7 @@ class CommentsControllerTest {
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id").value(1L))
-			.andExpect(jsonPath("$.writer").value("tester"))
+			.andExpect(jsonPath("$.writerNickName").value("tester"))
 			.andExpect(jsonPath("$.comments").value("test comments"))
 
 			.andDo(print());
@@ -99,7 +99,9 @@ class CommentsControllerTest {
 		//when
 		mvc.perform(put("/comments/update").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(UpdateRequest.builder()
-					.writer("tester")
+					.writerNickName("tester")
+					.userId("userId")
+					.userPassword("userPassword")
 					.comments("update")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -113,10 +115,10 @@ class CommentsControllerTest {
 	@DisplayName("04_00. /comments/delete")
 	@Test
 	public void test_04_00() throws Exception {
-	    //given
+		//given
 		given(commentsService.delete(any())).willReturn(true);
 
-	    //when
+		//when
 		mvc.perform(delete("/comments/delete")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(DeleteRequest.builder()
@@ -125,6 +127,6 @@ class CommentsControllerTest {
 			.andExpect(status().isOk())
 			.andDo(print());
 
-	    //then
+		//then
 	}
 }

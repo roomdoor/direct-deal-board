@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.PostsDto.Response;
@@ -36,6 +37,9 @@ class PostsServiceTest {
 
 	@Mock
 	private UserRepository userRepository;
+
+	@Mock
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@InjectMocks
 	private PostsService postsService;
@@ -149,7 +153,7 @@ class PostsServiceTest {
 		given(postsRepository.save(any())).willReturn(Posts.builder()
 			.id(1L)
 			.userId("이연주")
-				.writerNickName("xoxo")
+			.writerNickName("xoxo")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
 			.views(0L)
@@ -157,10 +161,15 @@ class PostsServiceTest {
 			.category(Category.SALE)
 			.build());
 
+		given(userRepository.findById(any())).willReturn(Optional.of(User.builder()
+			.id("이연주")
+			.build()));
+
+		given(passwordEncoder.matches(any(), any())).willReturn(true);
 		//when
 		Response posts = postsService.update(UpdateRequest.builder()
 			.id(1L)
-				.userId("이연주")
+			.userId("이연주")
 			.writerNickName("xoxo")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
@@ -201,7 +210,7 @@ class PostsServiceTest {
 			.build()));
 
 //		given(postsRepository.delete(any()))
-
+		given(passwordEncoder.matches(any(), any())).willReturn(true);
 		//when
 
 		postsService.delete(PostsDto.DeleteRequest.builder()
@@ -266,6 +275,7 @@ class PostsServiceTest {
 			.password("222")
 			.build()));
 
+		given(passwordEncoder.matches(any(), any())).willReturn(false);
 //		given(postsRepository.delete(any()))
 
 		//when

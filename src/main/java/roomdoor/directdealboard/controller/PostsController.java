@@ -50,7 +50,7 @@ public class PostsController {
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<?> delete(@RequestBody PostsDto.DeleteRequest deleteRequest) {
+	public ResponseEntity<?> delete(@Valid @RequestBody PostsDto.DeleteRequest deleteRequest) {
 		postsService.delete(deleteRequest);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}

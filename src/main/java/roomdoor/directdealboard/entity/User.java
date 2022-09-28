@@ -51,6 +51,11 @@ public class User extends BaseEntity {
 	@JoinColumn(name = "user_id")
 	private List<Posts> postsList;
 
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private List<Comments> commentsList;
+
 	public static User DtoToUser(UserDto.CreateRequest userCreateRequestDto) {
 		return User.builder()
 			.id(userCreateRequestDto.getId())

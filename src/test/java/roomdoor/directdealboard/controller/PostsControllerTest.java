@@ -12,7 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc;
 import roomdoor.directdealboard.config.SecurityConfiguration;
 import roomdoor.directdealboard.dto.PostsDto;
+import roomdoor.directdealboard.dto.PostsDto.CreateRequest;
 import roomdoor.directdealboard.dto.PostsDto.Response;
 import roomdoor.directdealboard.exception.exception.PostsException;
 import roomdoor.directdealboard.service.PostsService;
@@ -47,6 +52,9 @@ class PostsControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
+
+	@Autowired
+	private Validator validatorInjected;
 
 
 	@DisplayName("01_00. /posts/get success")
@@ -112,7 +120,8 @@ class PostsControllerTest {
 	public void test_03_00() throws Exception {
 		//given
 		given(postsService.create(any())).willReturn(PostsDto.Response.builder()
-			.writerNickName("ss@ss.com")
+			.writerNickName("room")
+			.category(Category.SALE)
 			.title("글 생성 텍스트 ")
 			.text("test posts text")
 			.isSailed(false)
@@ -124,7 +133,8 @@ class PostsControllerTest {
 		mvc.perform(post("/posts/create")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.CreateRequest.builder()
-					.writerNickName("ss@ss.com")
+					.writerNickName("room")
+					.userId("ss@ss.com")
 					.title("글 생성 텍스트 ")
 					.category(Category.SALE)
 					.userId("dldldldll")
@@ -132,7 +142,7 @@ class PostsControllerTest {
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andExpect(status().isCreated())
-			.andExpect(jsonPath("$.writerNickName").value("ss@ss.com"))
+			.andExpect(jsonPath("$.writerNickName").value("room"))
 			.andDo(print());
 
 		//then
@@ -147,15 +157,24 @@ class PostsControllerTest {
 			.build());
 
 		//when
+		CreateRequest request = CreateRequest.builder()
+			.build();
 		mvc.perform(post("/posts/create")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(PostsDto.CreateRequest.builder()
-					.build()))
+				.content(objectMapper.writeValueAsString(request))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
-			.andExpect(status().isBadRequest())
-			.andDo(print());
+			.andReturn();
+
+		Set<ConstraintViolation<CreateRequest>> validate = validatorInjected.validate(request);
 
 		//then
+		Iterator<ConstraintViolation<CreateRequest>> iterator = validate.iterator();
+		List<String> messages = new ArrayList<>();
+		while (iterator.hasNext()) {
+			ConstraintViolation<CreateRequest> next = iterator.next();
+			messages.add(next.getMessage());
+			System.out.println("message = " + next.getMessage());
+		}
 	}
 
 	@DisplayName("04_00. /posts/update success")
@@ -175,7 +194,9 @@ class PostsControllerTest {
 					.id(1L)
 					.writerNickName("ss@ss.com")
 					.title("update title")
-						.userId("dldldldl")
+					.userId("dldldldl")
+					.userPassword("1234")
+					.category(Category.SALE)
 					.text("text update but nothing change")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))

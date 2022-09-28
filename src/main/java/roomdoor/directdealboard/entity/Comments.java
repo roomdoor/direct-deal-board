@@ -1,13 +1,10 @@
 package roomdoor.directdealboard.entity;
 
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import lombok.*;
 
 @Getter
@@ -24,12 +21,12 @@ public class Comments extends BaseEntity{
 
 	@Column(name = "posts_id")
 	private Long postsId;
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@ToString.Exclude
-//	private Posts posts;
 
 	private String comments;
-	private String writer;
+	private String writerNickName;
+	@Column(name = "user_id")
+	private String userId;
+
 	private Long likeCount;
 
 }

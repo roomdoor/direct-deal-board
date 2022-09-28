@@ -33,6 +33,7 @@ public class Posts extends BaseEntity{
 	private Category category;
 
 	private String writerNickName;
+
 	@Column(name = "user_id")
 	private String userId;
 

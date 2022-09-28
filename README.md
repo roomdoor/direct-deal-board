@@ -24,41 +24,91 @@
 
 ### 1단계(기본 기능)
 
-1. 회원가입
-    - 유효성 검사, 중복 검사
+
+1. 유저 
+   - C 회원가입
+      - 유효성 검사, 중복 검사
         1. 회원 아이디 o
         2. 회원 닉네임 o
         3. 회원 비밀번호 o
-        4. 회원 주소 
-        5. 회원 휴대폰번호 o
-        6. 이메일 인증 o
+        4. 회원 주소
+        5. 회원 휴대폰번호 o  
+        </br>    
+      - 이메일 인증 o  
+      </br>
+     
+   - R 유저 디테일
+     - 유저 상세정보 o
+     - 유저가 작성한 글 o
+     - 유저가 작성한 댓글 o
+     </br>
+     
+   - U 유저 수정
+     - 유저 비밀번호 확인 후 수정 o
+     - 유저 비밀번호 초기화 -> 이메일 인증으로  
+       </br>
+     
+   - D 유저 삭제
+     - 유저 비밀번호 확인 후 삭제 o  
+       </br>
+     
+   - 로그인
+     - 아이디 찾기, 비밀번호 초기화 기능 
+     - 로그인 상태에서 글, 댓글 작성 가능 
+     - 회원 정보 수정 가능 o  
+       </br>
+
+2. 글 CRUD
+   - C
+     - 로그인 시 글 작성가능 o
+     - 제목, 글 내용 validation  
+       </br>
+   - R
+     - 글 정보 읽기 o
+     - 글 정보 읽을 시 조회수 증가 o
+     - 글에 달린 댓글 불러오기 o  
+       </br>
+     
+   - U
+     - 글 작성자만 글 수정 가능 o  
+       </br>
+   - D
+      - 글 작성자만 글 삭제 가능 o  
+        </br>
+   
+   - 좋아요 카운트 기능 
 
 
-2. 로그인
-    - 아이디 찾기, 비밀번호 초기화 기능 
-    - 로그인 상태에서 글, 댓글 작성 가능 
-    - 회원 정보 수정 가능 o
+3. 댓글 CRUD
+   - C
+      - 로그인 시 댓글 작성가능 o
+      - 댓글 내용 validation  
+        </br>
+     
+   - R
+      - 댓글 정보 읽기 o
+      - 글에 달린 댓글 불러오기 o
+      - 유저가 작성한 댓글 불러오기  
+        </br>
 
+   - U
+      - 댓글 작성자만 댓글 수정 가능 o  
+        </br>
 
-3. 회원 정보 수정
-    - 비밀번호, 주소, 휴대폰 수정 가능 o
-    - 기존 비밀번호와 다르면 수정 불가능 o
+   - D
+      - 댓글 작성자만 댓글 삭제 가능 o  
+        </br>
 
-
-4. 글 CRUD
-    - 로그인 시 글 작성 
-    - 자신이 쓴 글 수정 가능
-    - 조회수, 좋아요 추가
-    - 검색 태그
-
-
-5. 댓글 CRUD
+   - 좋아요 카운트 기능
     - 로그인시 댓글 작성 가능
     - 자신이 쓴 댓글 수정 가능
 
 ### 2단계 (추가 세부 기능)
 
-6. 게시글 페이징 처리
+6. 페이징 처리
+    - 글 목록 페이징처리
+    - 댓글 페이징처리  
+   </br>
 
 
 7. 게시글 검색 기능
@@ -91,20 +141,6 @@
     - 판매 수
     - 생성일자
     - 수정일자
-    - create table user
-      (
-      id                  varchar(255) not null primary key, 
-      address             varchar(255) null,
-      created_at          datetime(6)  null,
-      deal_total_count    int          not null,
-      email_yn            bit          not null,
-      nick_name           varchar(255) null,
-      password            varchar(255) null,
-      password_reset_code varchar(255) null,
-      phone_number        varchar(255) null,
-      updated_at          datetime(6)  null
-      );
-
 
 2. 글
     - 아이디
@@ -117,19 +153,7 @@
     - 판매 여부
     - 생성일자
     - 수정일자
-    - create table posts
-      (
-      id         bigint       not null primary key,
-      created_at datetime(6)  null,
-      is_sailed  bit          not null,
-      like_count bigint       null,
-      teg        varchar(255) null,
-      text       varchar(255) null,
-      title      varchar(255) null,
-      updated_at datetime(6)  null,
-      views      bigint       null,
-      writer     varchar(255) null
-      );
+
 
 
 3. 댓글
@@ -138,16 +162,6 @@
     - 좋아요
     - 생성일자
     - 수정일자
-    - create table comments
-      (
-      id         bigint       not null primary key,
-      comments   varchar(255) null,
-      created_at datetime(6)  null,
-      like_count bigint       null,
-      updated_at datetime(6)  null,
-      writer     varchar(255) null
-      );
-
 
 4. 주문
     - 주문 번호
@@ -158,17 +172,7 @@
     - 수령 여부
     - 생성일자
     - 수정일자
-    - create table orders
-      (
-      order_number     varchar(255) not null primary key,
-      buyer            varchar(255) null,
-      created_at       datetime(6)  null,
-      delivery_company varchar(255) null,
-      delivery_number  varchar(255) null,
-      is_received      bit          not null,
-      seller           varchar(255) null,
-      updated_at       datetime(6)  null
-      );
+
 
 
 

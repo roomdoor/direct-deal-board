@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import roomdoor.directdealboard.dto.CommentsDto;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.entity.User;
@@ -33,6 +34,11 @@ public class UserController {
 	@GetMapping("/get/posts")
 	public ResponseEntity<List<PostsDto.Response>> userDetailPosts(@RequestParam String id) {
 		return ResponseEntity.ok(userService.getAllPosts(id));
+	}
+
+	@GetMapping("/get/comments")
+	public ResponseEntity<List<CommentsDto.Response>> userDetailComments(@RequestParam String id) {
+		return ResponseEntity.ok(userService.getAllComments(id));
 	}
 
 	@PostMapping("/create")

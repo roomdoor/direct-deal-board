@@ -19,6 +19,9 @@ public class Orders extends BaseEntity{
 	private String deliveryCompany;
 	private String deliveryNumber;
 
+	private String userId;
+	private Long PostsId;
+
 	private String seller;
 	private String buyer;
 	private boolean isReceived;
