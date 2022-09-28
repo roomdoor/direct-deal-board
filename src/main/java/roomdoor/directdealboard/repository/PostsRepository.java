@@ -10,11 +10,4 @@ import roomdoor.directdealboard.entity.Posts;
 @Repository
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
-	@EntityGraph(attributePaths = {"categories"})
-	@Override
-	List<Posts> findAll();
-
-	@EntityGraph(attributePaths = {"categories"})
-	@Override
-	Optional<Posts> findById(Long aLong);
 }

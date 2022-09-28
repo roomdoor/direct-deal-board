@@ -4,7 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Category {
-	멍떄리는중("test 용 enum"),
+
+	NOTICE("공지사항 게시판"),
+	SALE("판매 게시판"),
+	BUY("구매 게시판"),
+	REPORT("신고 게시판"),
+	QNA("QNA 게시판"),
 
 	;
 

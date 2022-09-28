@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.var;
+import org.springframework.util.ObjectUtils;
 import roomdoor.directdealboard.entity.Comments;
 
 @Getter
@@ -40,6 +41,10 @@ public class CommentsDto {
 		}
 
 		public static List<Response> of(List<Comments> comments) {
+			if (ObjectUtils.isEmpty(comments)) {
+				return new ArrayList<>();
+			}
+
 			List<Response> responses = new ArrayList<>();
 			for (var comment : comments) {
 				responses.add(Response.of(comment));
@@ -58,6 +63,7 @@ public class CommentsDto {
 	@Builder
 	public static class CreateRequest {
 
+		@NotNull
 		private Long postsId;
 
 		@NotEmpty

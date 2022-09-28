@@ -29,6 +29,7 @@ import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.PostsDto.Response;
 import roomdoor.directdealboard.exception.PostsException;
 import roomdoor.directdealboard.service.PostsService;
+import roomdoor.directdealboard.type.Category;
 import roomdoor.directdealboard.type.ErrorCode;
 
 @WebMvcTest(controllers = PostsController.class
@@ -56,7 +57,7 @@ class PostsControllerTest {
 			.title("방송 보면서 코딩")
 			.text("방송 보면서 개프 구현 중 지루하니까 이렇게 해야겠다")
 			.isSailed(false)
-			.categories(new ArrayList<>())
+			.category(Category.SALE)
 			.views(0L)
 			.likeCount(0L)
 			.writer("이시화 (원래 여기 아이디(이메일)이 들어감)")

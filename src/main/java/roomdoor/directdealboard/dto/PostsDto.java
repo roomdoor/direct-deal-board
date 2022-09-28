@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.type.Category;
 
@@ -33,13 +34,12 @@ public class PostsDto {
 		@NotBlank(message = "글 내용은 필수 입력 값입니다.")
 		private String text;
 
-
-		private List<Category> categories;
+		@NotNull
+		private Category category;
 
 		@NotNull
 		private String writer;
 	}
-
 
 
 	@Getter
@@ -60,7 +60,7 @@ public class PostsDto {
 		private String text;
 
 
-		private List<Category> categories;
+		private Category category;
 
 		@NotNull
 		private String writer;
@@ -85,6 +85,7 @@ public class PostsDto {
 	@Setter
 	@AllArgsConstructor
 	@NoArgsConstructor
+	@ToString
 	@Builder
 	public static class Response {
 
@@ -93,8 +94,10 @@ public class PostsDto {
 		@NotBlank(message = "글 내용은 필수 입력 값입니다.")
 		private String text;
 
+		@NotBlank(message = "카테고리 선택은 필수 입력 값입니다.")
+		private Category category;
 
-		private List<Category> categories;
+		private List<CommentsDto.Response> commentList;
 
 		@NotNull
 		private String writer;
@@ -107,11 +110,12 @@ public class PostsDto {
 			return Response.builder()
 				.title(posts.getTitle())
 				.text(posts.getText())
-				.categories(posts.getCategories())
+				.category(posts.getCategory())
 				.writer(posts.getWriter())
 				.views(posts.getViews())
 				.likeCount(posts.getLikeCount())
 				.isSailed(posts.isSailed())
+				.commentList(CommentsDto.Response.of(posts.getCommentsList()))
 				.build();
 		}
 

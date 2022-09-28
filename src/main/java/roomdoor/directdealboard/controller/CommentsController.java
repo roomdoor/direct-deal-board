@@ -30,11 +30,11 @@ public class CommentsController {
 			.body(CommentsDto.Response.of(commentsService.getComment(id)));
 	}
 
-	@GetMapping("/list")
-	public ResponseEntity<List<Response>> list(@RequestParam Long id) {
-		return ResponseEntity.status(HttpStatus.OK)
-			.body(Response.of(commentsService.list(id)));
-	}
+//	@GetMapping("/list")
+//	public ResponseEntity<List<Response>> list(@RequestParam Long id) {
+//		return ResponseEntity.status(HttpStatus.OK)
+//			.body(Response.of(commentsService.list(id)));
+//	}
 
 	@PostMapping("/create")
 	public ResponseEntity<?> create(

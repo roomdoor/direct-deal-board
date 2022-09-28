@@ -38,6 +38,7 @@ public class PostsService {
 
 		Posts posts = optionalPosts.get();
 		posts.setViews(posts.getViews() + 1);
+		System.out.println("조회수 카운트 +++++++++++++++++++++++++");
 		postsRepository.save(posts);
 
 		return PostsDto.Response.of(posts);
@@ -53,7 +54,7 @@ public class PostsService {
 			.writer(createRequest.getWriter())
 			.title(createRequest.getTitle())
 			.text(createRequest.getText())
-			.categories(createRequest.getCategories())
+			.category(createRequest.getCategory())
 			.views(0L)
 			.likeCount(0L)
 			.isSailed(false)

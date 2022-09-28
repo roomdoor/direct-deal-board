@@ -32,8 +32,7 @@ public class Posts extends BaseEntity{
 	private String text;
 
 	@Enumerated(EnumType.STRING)
-	@ElementCollection
-	private List<Category> categories;
+	private Category category;
 
 	private String writer;
 	private String writerId;
@@ -42,7 +41,7 @@ public class Posts extends BaseEntity{
 	private Long likeCount;
 	private boolean isSailed;
 
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "posts_id")
 	List<Comments> commentsList;
 

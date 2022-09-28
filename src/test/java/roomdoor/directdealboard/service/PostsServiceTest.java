@@ -49,13 +49,14 @@ class PostsServiceTest {
 			.title("test글 제목")
 			.text("글 내용")
 			.views(0L)
+			.commentsList(new ArrayList<>())
 			.build()));
 
 		given(postsRepository.save(any())).willReturn(any());
 
 		//when
 		PostsDto.Response posts = postsService.getPosts(1L);
-
+		System.out.println(posts.toString());
 		//then
 		assertEquals(posts.getTitle(), "test글 제목");
 		assertEquals(posts.getText(), "글 내용");
@@ -95,15 +96,13 @@ class PostsServiceTest {
 	@Test
 	public void test_03() {
 		//given
-		List<Category> categories = new ArrayList<>();
-		categories.add(Category.멍떄리는중);
 		given(postsRepository.save(any())).willReturn(Posts.builder()
 			.writer("이연주")
 			.title("멍때리는 중")
 			.text("아 시험지도 다 점검했고 수행평가 채점도 다 했는데 시화는 아직 공부중이다 방해하지말고 멍떄려야지...")
 			.views(0L)
 			.likeCount(0L)
-			.categories(categories)
+			.category(Category.SALE)
 			.build());
 
 		//when
@@ -116,7 +115,7 @@ class PostsServiceTest {
 		//then
 		assertEquals(posts.getWriter(), "이연주");
 		assertEquals(posts.getTitle(), "멍때리는 중");
-		assertEquals(posts.getCategories().get(0), Category.멍떄리는중);
+		assertEquals(posts.getCategory(), Category.SALE);
 	}
 
 	@DisplayName("04. user update success")
@@ -130,7 +129,7 @@ class PostsServiceTest {
 			.text("아 시험지도 다 점검했고 수행평가 채점도 다 했는데 시화는 아직 공부중이다 방해하지말고 멍떄려야지...")
 			.views(0L)
 			.likeCount(0L)
-			.categories(new ArrayList<>())
+			.category(Category.SALE)
 			.build()));
 
 		given(postsRepository.save(any())).willReturn(Posts.builder()
@@ -140,7 +139,7 @@ class PostsServiceTest {
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
 			.views(0L)
 			.likeCount(0L)
-			.categories(new ArrayList<>())
+			.category(Category.SALE)
 			.build());
 
 		//when

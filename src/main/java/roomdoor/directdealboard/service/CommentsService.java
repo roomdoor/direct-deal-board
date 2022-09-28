@@ -9,6 +9,7 @@ import roomdoor.directdealboard.dto.CommentsDto.DeleteRequest;
 import roomdoor.directdealboard.dto.CommentsDto.Response;
 import roomdoor.directdealboard.dto.CommentsDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Comments;
+import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.exception.CommentsException;
 import roomdoor.directdealboard.exception.UserException;
@@ -29,10 +30,9 @@ public class CommentsService {
 			.orElseThrow(() -> new CommentsException(ErrorCode.NOT_FOUND_COMMENTS));
 	}
 
-
-	public List<Comments> list(Long id) {
-		return commentsRepository.findAllByPostsId(id);
-	}
+//	public List<Comments> list(Long id) {
+//		return commentsRepository.findAllByPostsId(id);
+//	}
 
 	public Comments create(CreateRequest createRequest) {
 
