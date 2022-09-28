@@ -161,7 +161,7 @@ class UserControllerTest {
 	@Test
 	public void test_03_01() throws Exception {
 		//given
-		given(userService.emailAuth(any(), any())).willReturn(true);
+		given(userService.emailAuthWhenCreate(any(), any())).willReturn(true);
 		//when
 		//then
 		mvc.perform(get("/user/email-auth?uuid=1111&email=sihwa95@naver.com")
@@ -174,7 +174,7 @@ class UserControllerTest {
 	@Test
 	public void test_03_02() throws Exception {
 		//given
-		given(userService.emailAuth(any(), any())).willThrow(
+		given(userService.emailAuthWhenCreate(any(), any())).willThrow(
 			new UserException(ErrorCode.EMAIL_CODE_MISMATCH));
 		//when
 

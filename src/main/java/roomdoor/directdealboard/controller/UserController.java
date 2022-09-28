@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import roomdoor.directdealboard.dto.CommentsDto;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto;
-import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.service.UserService;
 
 @RestController
@@ -55,16 +54,30 @@ public class UserController {
 		return new ResponseEntity<>(userService.userCreate(createRequest), HttpStatus.CREATED);
 	}
 
-	@GetMapping("/email-auth")
-	public ResponseEntity<?> emailAuth(@RequestParam String uuid, @RequestParam String email) {
-		userService.emailAuth(uuid, email);
+	@GetMapping("/create/email-auth")
+	public ResponseEntity<?> emailAuthWhenCreate(@RequestParam String uuid,
+		@RequestParam String email) {
+		userService.emailAuthWhenCreate(uuid, email);
 
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("password-reset-request")
+	public ResponseEntity<?> passwordResetRequest(@RequestBody UserDto.PasswordResetDto resetDto) {
+		return ResponseEntity.ok(userService.passwordResetRequest(resetDto));
+	}
+
+	@GetMapping("/password-reset/email-auth")
+	public ResponseEntity<?> emailAuthWhenPasswordReset(@RequestParam String uuid,
+		@RequestParam String email) {
+		return new ResponseEntity<>(userService.passwordReset(uuid, email),
+			HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<UserDto.Response> userDelete(
 		@RequestBody UserDto.DeleteRequest deleteRequest) {
+
 		return new ResponseEntity<>(userService.userDelete(deleteRequest), HttpStatus.OK);
 	}
 

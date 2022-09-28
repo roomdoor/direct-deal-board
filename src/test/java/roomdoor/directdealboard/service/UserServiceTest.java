@@ -86,7 +86,7 @@ class UserServiceTest {
 			.build()));
 
 		//when
-		boolean result = userService.emailAuth("qwer1234", "ss@ss.com");
+		boolean result = userService.emailAuthWhenCreate("qwer1234", "ss@ss.com");
 
 		//then
 		assertTrue(result);
@@ -106,7 +106,7 @@ class UserServiceTest {
 
 		//when
 		assertThrows(UserException.class, () ->
-			userService.emailAuth("1234qwer", "ss@ss.com"));
+			userService.emailAuthWhenCreate("1234qwer", "ss@ss.com"));
 
 		//then
 	}
