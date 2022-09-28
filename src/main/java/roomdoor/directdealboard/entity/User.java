@@ -20,7 +20,7 @@ import roomdoor.directdealboard.type.UserState;
 @NoArgsConstructor
 @Builder
 @Entity
-public class User {
+public class User extends BaseEntity {
 
 	@Id
 	private String id;
@@ -40,9 +40,6 @@ public class User {
 	private String passwordResetCode;
 	private boolean passwordResetYn;
 
-
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 
 	public static User DtoToUser(UserDto.CreateRequest userCreateRequestDto) {
 		return User.builder()
@@ -66,8 +63,8 @@ public class User {
 			", dealTotalCount=" + dealTotalCount +
 			", emailYn=" + emailYn +
 			", passwordResetCode='" + passwordResetCode + '\'' +
-			", createdAt=" + createdAt +
-			", updatedAt=" + updatedAt +
+			", createdAt=" + this.getCreatedAt() +
+			", updatedAt=" + this.getUpdatedAt() +
 			'}';
 	}
 }

@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Orders {
+public class Orders extends BaseEntity{
 
 	@Id
 	private String orderNumber;
@@ -22,8 +22,5 @@ public class Orders {
 	private String seller;
 	private String buyer;
 	private boolean isReceived;
-
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 
 }

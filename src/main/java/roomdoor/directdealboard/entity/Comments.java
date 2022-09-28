@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import lombok.*;
 
 @Getter
@@ -13,17 +14,19 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Comments {
+public class Comments extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
+	@ManyToOne
+	@ToString.Exclude
+	private Posts posts;
 
 	private Long postsId;
 	private String comments;
 	private String writer;
 	private Long likeCount;
 
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
 }

@@ -13,6 +13,7 @@ import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.exception.PostsException;
 import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.repository.CommentsRepository;
 import roomdoor.directdealboard.repository.PostsRepository;
 import roomdoor.directdealboard.repository.UserRepository;
 import roomdoor.directdealboard.type.ErrorCode;
@@ -25,12 +26,15 @@ public class PostsService {
 
 	private final UserRepository userRepository;
 
+	private final CommentsRepository commentsRepository;
+
 	public Response getPosts(Long id) {
 		Optional<Posts> optionalPosts = postsRepository.findById(id);
 
 		if (!optionalPosts.isPresent()) {
 			throw new PostsException(ErrorCode.NOT_FOUND_POSTS);
 		}
+
 
 		Posts posts = optionalPosts.get();
 		posts.setViews(posts.getViews() + 1);

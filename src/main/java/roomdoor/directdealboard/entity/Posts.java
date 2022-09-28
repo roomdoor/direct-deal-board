@@ -7,9 +7,12 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import lombok.*;
 import roomdoor.directdealboard.type.Category;
 
@@ -19,7 +22,7 @@ import roomdoor.directdealboard.type.Category;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Posts {
+public class Posts extends BaseEntity{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,6 +42,8 @@ public class Posts {
 	private Long likeCount;
 	private boolean isSailed;
 
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "posts_id")
+	List<Comments> commentsList;
+
 }
