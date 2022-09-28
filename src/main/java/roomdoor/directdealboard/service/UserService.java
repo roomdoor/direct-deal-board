@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,14 +14,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.components.MailComponents;
+import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.dto.UserDto.CreateRequest;
 import roomdoor.directdealboard.dto.UserDto.DeleteRequest;
 import roomdoor.directdealboard.dto.UserDto.Response;
 import roomdoor.directdealboard.dto.UserDto.UpdateRequest;
+import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
-import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.UserRepository;
 import roomdoor.directdealboard.type.ErrorCode;
 import roomdoor.directdealboard.type.UserState;
@@ -37,6 +39,16 @@ public class UserService implements UserDetailsService {
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+	public UserDto.Response userDetail(String id) {
+		return UserDto.Response.of(getUser(id));
+	}
+
+	@Transactional
+	public List<PostsDto.Response> getAllPosts(String id) {
+		User user = getUser(id);
+		return PostsDto.Response.of(user.getPostsList());
+	}
 
 	public Response userCreate(UserDto.CreateRequest createRequest) {
 

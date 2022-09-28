@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import roomdoor.directdealboard.dto.UserDto;
-import roomdoor.directdealboard.entity.User;
-import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.UserRepository;
 import roomdoor.directdealboard.service.UserService;
 import roomdoor.directdealboard.type.ErrorCode;

@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import roomdoor.directdealboard.config.SecurityConfiguration;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.PostsDto.Response;
-import roomdoor.directdealboard.exception.PostsException;
+import roomdoor.directdealboard.exception.exception.PostsException;
 import roomdoor.directdealboard.service.PostsService;
 import roomdoor.directdealboard.type.Category;
 import roomdoor.directdealboard.type.ErrorCode;
@@ -60,7 +60,7 @@ class PostsControllerTest {
 			.category(Category.SALE)
 			.views(0L)
 			.likeCount(0L)
-			.writer("이시화 (원래 여기 아이디(이메일)이 들어감)")
+			.writerNickName("이시화 (원래 여기 아이디(이메일)이 들어감)")
 			.build());
 
 		//when
@@ -69,7 +69,7 @@ class PostsControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.title").value("방송 보면서 코딩"))
 			.andExpect(jsonPath("$.text").value("방송 보면서 개프 구현 중 지루하니까 이렇게 해야겠다"))
-			.andExpect(jsonPath("$.writer").value("이시화 (원래 여기 아이디(이메일)이 들어감)"))
+			.andExpect(jsonPath("$.writerNickName").value("이시화 (원래 여기 아이디(이메일)이 들어감)"))
 			.andDo(print());
 		//then
 	}
@@ -112,7 +112,7 @@ class PostsControllerTest {
 	public void test_03_00() throws Exception {
 		//given
 		given(postsService.create(any())).willReturn(PostsDto.Response.builder()
-			.writer("ss@ss.com")
+			.writerNickName("ss@ss.com")
 			.title("글 생성 텍스트 ")
 			.text("test posts text")
 			.isSailed(false)
@@ -124,13 +124,15 @@ class PostsControllerTest {
 		mvc.perform(post("/posts/create")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.CreateRequest.builder()
-					.writer("ss@ss.com")
+					.writerNickName("ss@ss.com")
 					.title("글 생성 텍스트 ")
+					.category(Category.SALE)
+					.userId("dldldldll")
 					.text("test posts text")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andExpect(status().isCreated())
-			.andExpect(jsonPath("$.writer").value("ss@ss.com"))
+			.andExpect(jsonPath("$.writerNickName").value("ss@ss.com"))
 			.andDo(print());
 
 		//then
@@ -141,7 +143,7 @@ class PostsControllerTest {
 	public void test_03_01() throws Exception {
 		//given
 		given(postsService.create(any())).willReturn(PostsDto.Response.builder()
-			.writer("ss@ss.com")
+			.writerNickName("ss@ss.com")
 			.build());
 
 		//when
@@ -161,7 +163,7 @@ class PostsControllerTest {
 	public void test_04_00() throws Exception {
 		//given
 		given(postsService.update(any())).willReturn(PostsDto.Response.builder()
-			.writer("ss@ss.com")
+			.writerNickName("ss@ss.com")
 			.title("update title")
 			.text("text update but nothing change")
 			.build());
@@ -171,8 +173,9 @@ class PostsControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.UpdateRequest.builder()
 					.id(1L)
-					.writer("ss@ss.com")
+					.writerNickName("ss@ss.com")
 					.title("update title")
+						.userId("dldldldl")
 					.text("text update but nothing change")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
@@ -193,7 +196,7 @@ class PostsControllerTest {
 		mvc.perform(put("/posts/update")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.UpdateRequest.builder()
-					.writer("ss@ss.com")
+					.writerNickName("ss@ss.com")
 					.title("update title")
 					.text("text update but nothing change")
 					.build()))
@@ -213,7 +216,7 @@ class PostsControllerTest {
 		mvc.perform(put("/posts/update")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.UpdateRequest.builder()
-					.writer("ss@ss.com")
+					.writerNickName("ss@ss.com")
 					.title("update title")
 					.text("text update but nothing change")
 					.build()))
@@ -232,8 +235,8 @@ class PostsControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.DeleteRequest.builder()
 					.id(1L)
-					.writerId("ss@ss.com")
-					.writerPassword("posts writer password")
+					.userId("ss@ss.com")
+					.userPassword("posts writer password")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andExpect(status().isOk())
@@ -253,8 +256,8 @@ class PostsControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.DeleteRequest.builder()
 					.id(1L)
-					.writerId("ss@ss.com")
-					.writerPassword("posts writer password")
+					.userId("ss@ss.com")
+					.userPassword("posts writer password")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andExpect(status().isBadRequest())
@@ -275,8 +278,8 @@ class PostsControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(PostsDto.DeleteRequest.builder()
 					.id(1L)
-					.writerId("ss@ss.com")
-					.writerPassword("posts writer password")
+					.userId("ss@ss.com")
+					.userPassword("posts writer password")
 					.build()))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andExpect(status().isBadRequest())

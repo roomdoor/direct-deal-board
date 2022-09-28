@@ -3,16 +3,13 @@ package roomdoor.directdealboard.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import roomdoor.directdealboard.dto.CommentsDto;
 import roomdoor.directdealboard.dto.CommentsDto.CreateRequest;
 import roomdoor.directdealboard.dto.CommentsDto.DeleteRequest;
-import roomdoor.directdealboard.dto.CommentsDto.Response;
 import roomdoor.directdealboard.dto.CommentsDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Comments;
-import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
-import roomdoor.directdealboard.exception.CommentsException;
-import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.exception.exception.CommentsException;
+import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.CommentsRepository;
 import roomdoor.directdealboard.repository.UserRepository;
 import roomdoor.directdealboard.type.ErrorCode;
@@ -30,9 +27,9 @@ public class CommentsService {
 			.orElseThrow(() -> new CommentsException(ErrorCode.NOT_FOUND_COMMENTS));
 	}
 
-//	public List<Comments> list(Long id) {
-//		return commentsRepository.findAllByPostsId(id);
-//	}
+	public List<Comments> list(Long id) {
+		return commentsRepository.findAllByPostsId(id);
+	}
 
 	public Comments create(CreateRequest createRequest) {
 

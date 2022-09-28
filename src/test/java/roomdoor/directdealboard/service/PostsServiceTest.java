@@ -17,10 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.PostsDto.Response;
 import roomdoor.directdealboard.dto.PostsDto.UpdateRequest;
+import roomdoor.directdealboard.entity.Comments;
 import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
-import roomdoor.directdealboard.exception.PostsException;
-import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.exception.exception.PostsException;
+import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.PostsRepository;
 import roomdoor.directdealboard.repository.UserRepository;
 import roomdoor.directdealboard.type.Category;
@@ -43,13 +44,24 @@ class PostsServiceTest {
 	@DisplayName("01. get posts success")
 	@Test
 	public void test_01() {
+		List<Comments> commentsList = new ArrayList<>();
+		commentsList.add(Comments.builder()
+			.postsId(1L)
+			.build());
+		commentsList.add(Comments.builder()
+			.postsId(1L)
+			.build());
+		commentsList.add(Comments.builder()
+			.postsId(1L)
+			.build());
+
 		//given
 		given(postsRepository.findById(any())).willReturn(Optional.of(Posts.builder()
 			.id(1L)
 			.title("test글 제목")
 			.text("글 내용")
 			.views(0L)
-			.commentsList(new ArrayList<>())
+			.commentsList(commentsList)
 			.build()));
 
 		given(postsRepository.save(any())).willReturn(any());
@@ -60,6 +72,8 @@ class PostsServiceTest {
 		//then
 		assertEquals(posts.getTitle(), "test글 제목");
 		assertEquals(posts.getText(), "글 내용");
+		assertEquals(posts.getCommentList().size(), 3);
+
 	}
 
 	@DisplayName("01_01. get user fail")
@@ -97,7 +111,7 @@ class PostsServiceTest {
 	public void test_03() {
 		//given
 		given(postsRepository.save(any())).willReturn(Posts.builder()
-			.writer("이연주")
+			.writerNickName("이연주")
 			.title("멍때리는 중")
 			.text("아 시험지도 다 점검했고 수행평가 채점도 다 했는데 시화는 아직 공부중이다 방해하지말고 멍떄려야지...")
 			.views(0L)
@@ -107,13 +121,13 @@ class PostsServiceTest {
 
 		//when
 		Response posts = postsService.create(PostsDto.CreateRequest.builder()
-			.writer("이연주")
+			.writerNickName("이연주")
 			.title("멍떄리는 중")
 			.text("아 시험지도 다 점검했고 수행평가 채점도 다 했는데 시화는 아직 공부중이다 방해하지말고 멍떄려야지...")
 			.build());
 
 		//then
-		assertEquals(posts.getWriter(), "이연주");
+		assertEquals(posts.getWriterNickName(), "이연주");
 		assertEquals(posts.getTitle(), "멍때리는 중");
 		assertEquals(posts.getCategory(), Category.SALE);
 	}
@@ -123,8 +137,8 @@ class PostsServiceTest {
 	public void test_04() {
 		//given
 		given(postsRepository.findById(any())).willReturn(Optional.of(Posts.builder()
-			.writerId("lee연주")
-			.writer("이연주")
+			.writerNickName("lee연주")
+			.userId("이연주")
 			.title("멍때리는 중")
 			.text("아 시험지도 다 점검했고 수행평가 채점도 다 했는데 시화는 아직 공부중이다 방해하지말고 멍떄려야지...")
 			.views(0L)
@@ -134,7 +148,8 @@ class PostsServiceTest {
 
 		given(postsRepository.save(any())).willReturn(Posts.builder()
 			.id(1L)
-			.writer("이연주")
+			.userId("이연주")
+				.writerNickName("xoxo")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
 			.views(0L)
@@ -145,7 +160,8 @@ class PostsServiceTest {
 		//when
 		Response posts = postsService.update(UpdateRequest.builder()
 			.id(1L)
-			.writer("이연주")
+				.userId("이연주")
+			.writerNickName("xoxo")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
 			.build());
@@ -164,7 +180,7 @@ class PostsServiceTest {
 			new PostsException(ErrorCode.NOT_FOUND_POSTS));
 		//when
 		assertThrows(PostsException.class, () -> postsService.update(UpdateRequest.builder()
-			.writer("이연주")
+			.writerNickName("이연주")
 			.title("휴지에 그림 그리기")
 			.text("시화 기다리다가 심심해서 휴지에 그림 그리는중!!")
 			.build()));
@@ -190,8 +206,8 @@ class PostsServiceTest {
 
 		postsService.delete(PostsDto.DeleteRequest.builder()
 			.id(1L)
-			.writerId("ss@ss.com")
-			.writerPassword("222")
+			.userId("ss@ss.com")
+			.userPassword("222")
 			.build());
 
 		//then
@@ -208,8 +224,8 @@ class PostsServiceTest {
 		assertThrows(PostsException.class,
 			() -> postsService.delete(PostsDto.DeleteRequest.builder()
 				.id(1L)
-				.writerId("ss@ss.com")
-				.writerPassword("222")
+				.userId("ss@ss.com")
+				.userPassword("222")
 				.build()));
 
 		//then
@@ -230,8 +246,8 @@ class PostsServiceTest {
 		assertThrows(UserException.class,
 			() -> postsService.delete(PostsDto.DeleteRequest.builder()
 				.id(1L)
-				.writerId("ss@ss.com")
-				.writerPassword("222")
+				.userId("ss@ss.com")
+				.userPassword("222")
 				.build()));
 
 		//then
@@ -255,8 +271,8 @@ class PostsServiceTest {
 		//when
 		assertThrows(UserException.class, () -> postsService.delete(PostsDto.DeleteRequest.builder()
 			.id(1L)
-			.writerId("ss@ss.com")
-			.writerPassword("비밀번호 틀렸대요")
+			.userId("ss@ss.com")
+			.userPassword("비밀번호 틀렸대요")
 			.build()));
 
 		//then

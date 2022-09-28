@@ -11,6 +11,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import roomdoor.directdealboard.exception.exception.PostsException;
+import roomdoor.directdealboard.exception.exception.UserException;
+import roomdoor.directdealboard.type.ErrorCode;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
@@ -43,7 +46,7 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(PostsException.class)
-	public ResponseEntity<?> handlerUserException(PostsException e) {
+	public ResponseEntity<?> handlerPostsException(PostsException e) {
 
 		return ResponseEntity
 			.status(HttpStatus.BAD_REQUEST)
@@ -54,5 +57,20 @@ public class GlobalExceptionHandler {
 				.timestamp(LocalDateTime.now())
 				.build());
 	}
+
+
+//	@ExceptionHandler(Exception.class)
+//	public ResponseEntity<?> handlerException(Exception e) {
+//
+//		return ResponseEntity
+//			.status(HttpStatus.BAD_REQUEST)
+//			.body(ApiExceptionEntity.builder()
+//				.httpStatus(HttpStatus.BAD_REQUEST)
+//				.errorCode(ErrorCode.EXCEPTION)
+//				.message(e.getMessage())
+//				.timestamp(LocalDateTime.now())
+//				.build());
+//	}
+
 
 }

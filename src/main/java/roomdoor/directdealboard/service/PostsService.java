@@ -11,8 +11,8 @@ import roomdoor.directdealboard.dto.PostsDto.Response;
 import roomdoor.directdealboard.dto.PostsDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Posts;
 import roomdoor.directdealboard.entity.User;
-import roomdoor.directdealboard.exception.PostsException;
-import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.exception.exception.PostsException;
+import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.CommentsRepository;
 import roomdoor.directdealboard.repository.PostsRepository;
 import roomdoor.directdealboard.repository.UserRepository;
@@ -38,7 +38,6 @@ public class PostsService {
 
 		Posts posts = optionalPosts.get();
 		posts.setViews(posts.getViews() + 1);
-		System.out.println("조회수 카운트 +++++++++++++++++++++++++");
 		postsRepository.save(posts);
 
 		return PostsDto.Response.of(posts);
@@ -51,7 +50,8 @@ public class PostsService {
 
 	public PostsDto.Response create(CreateRequest createRequest) {
 		Posts posts = postsRepository.save(Posts.builder()
-			.writer(createRequest.getWriter())
+			.writerNickName(createRequest.getWriterNickName())
+			.userId(createRequest.getUserId())
 			.title(createRequest.getTitle())
 			.text(createRequest.getText())
 			.category(createRequest.getCategory())
@@ -72,7 +72,7 @@ public class PostsService {
 
 		Posts posts = optionalPosts.get();
 
-		if (posts.getWriterId().equals(updateRequest.getWriter())) {
+		if (posts.getUserId().equals(updateRequest.getWriterNickName())) {
 			throw new PostsException(ErrorCode.MISMATCH_WRITER);
 		}
 
@@ -90,13 +90,13 @@ public class PostsService {
 			throw new PostsException(ErrorCode.NOT_FOUND_POSTS);
 		}
 
-		Optional<User> optionalUser = userRepository.findById(deleteRequest.getWriterId());
+		Optional<User> optionalUser = userRepository.findById(deleteRequest.getUserId());
 		if (!optionalUser.isPresent()) {
 			throw new UserException(ErrorCode.NOT_FOUND_USER);
 		}
 
 		User user = optionalUser.get();
-		if (!user.getPassword().equals(deleteRequest.getWriterPassword())) {
+		if (!user.getPassword().equals(deleteRequest.getUserPassword())) {
 			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
 

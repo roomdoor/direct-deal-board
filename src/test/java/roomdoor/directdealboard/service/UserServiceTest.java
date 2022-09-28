@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.components.MailComponents;
@@ -26,7 +25,7 @@ import roomdoor.directdealboard.dto.UserDto.DeleteRequest;
 import roomdoor.directdealboard.dto.UserDto.Response;
 import roomdoor.directdealboard.dto.UserDto.UpdateRequest;
 import roomdoor.directdealboard.entity.User;
-import roomdoor.directdealboard.exception.UserException;
+import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)

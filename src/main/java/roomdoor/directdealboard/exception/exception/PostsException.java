@@ -1,6 +1,6 @@
-package roomdoor.directdealboard.exception;
+package roomdoor.directdealboard.exception.exception;
 
-import java.time.LocalDateTime;
+
 import lombok.*;
 import roomdoor.directdealboard.type.ErrorCode;
 
@@ -9,12 +9,13 @@ import roomdoor.directdealboard.type.ErrorCode;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserException extends RuntimeException{
+public class PostsException extends RuntimeException {
 
 	private ErrorCode errorCode;
+
 	private String message;
 
-	public UserException(ErrorCode errorCode) {
+	public PostsException(ErrorCode errorCode) {
 		this.errorCode = errorCode;
 		this.message = errorCode.getDescription();
 	}

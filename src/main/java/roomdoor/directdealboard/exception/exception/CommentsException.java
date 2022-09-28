@@ -1,4 +1,4 @@
-package roomdoor.directdealboard.exception;
+package roomdoor.directdealboard.exception.exception;
 
 import lombok.*;
 import roomdoor.directdealboard.type.ErrorCode;

@@ -20,8 +20,11 @@ public enum ErrorCode {
 
 
 
-	NOT_FOUND_COMMENTS("존재하지 않는 댓글 입니다.")
+	NOT_FOUND_COMMENTS("존재하지 않는 댓글 입니다."),
 
+
+
+	EXCEPTION("에러")
 	;
 
 	private final String description;

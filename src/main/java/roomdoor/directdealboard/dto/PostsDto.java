@@ -38,7 +38,10 @@ public class PostsDto {
 		private Category category;
 
 		@NotNull
-		private String writer;
+		private String writerNickName;
+
+		@NotNull
+		private String userId;
 	}
 
 
@@ -63,7 +66,10 @@ public class PostsDto {
 		private Category category;
 
 		@NotNull
-		private String writer;
+		private String writerNickName;
+
+		@NotNull
+		private String userId;
 	}
 
 	@Getter
@@ -75,9 +81,9 @@ public class PostsDto {
 
 		private Long id;
 
-		private String writerId;
+		private String userId;
 
-		private String writerPassword;
+		private String userPassword;
 	}
 
 
@@ -100,7 +106,7 @@ public class PostsDto {
 		private List<CommentsDto.Response> commentList;
 
 		@NotNull
-		private String writer;
+		private String writerNickName;
 		private Long views;
 		private Long likeCount;
 		private boolean isSailed;
@@ -111,7 +117,7 @@ public class PostsDto {
 				.title(posts.getTitle())
 				.text(posts.getText())
 				.category(posts.getCategory())
-				.writer(posts.getWriter())
+				.writerNickName(posts.getWriterNickName())
 				.views(posts.getViews())
 				.likeCount(posts.getLikeCount())
 				.isSailed(posts.isSailed())

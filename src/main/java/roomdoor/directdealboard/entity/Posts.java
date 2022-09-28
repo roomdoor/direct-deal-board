@@ -1,9 +1,7 @@
 package roomdoor.directdealboard.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,8 +32,10 @@ public class Posts extends BaseEntity{
 	@Enumerated(EnumType.STRING)
 	private Category category;
 
-	private String writer;
-	private String writerId;
+	private String writerNickName;
+	@Column(name = "user_id")
+	private String userId;
+
 
 	private Long views;
 	private Long likeCount;
@@ -44,5 +44,4 @@ public class Posts extends BaseEntity{
 	@OneToMany(fetch = FetchType.EAGER)
 	@JoinColumn(name = "posts_id")
 	List<Comments> commentsList;
-
 }

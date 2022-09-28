@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.UserDto;
 import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.service.UserService;
@@ -23,6 +24,16 @@ import roomdoor.directdealboard.service.UserService;
 public class UserController {
 
 	private final UserService userService;
+
+	@GetMapping("/get")
+	public ResponseEntity<UserDto.Response> userDetail(@RequestParam String id) {
+		return ResponseEntity.ok(userService.userDetail(id));
+	}
+
+	@GetMapping("/get/posts")
+	public ResponseEntity<List<PostsDto.Response>> userDetailPosts(@RequestParam String id) {
+		return ResponseEntity.ok(userService.getAllPosts(id));
+	}
 
 	@PostMapping("/create")
 	public ResponseEntity<UserDto.Response> userCreate(
