@@ -29,13 +29,13 @@ public class PostsDto {
 
 
 		@NotBlank(message = "제목은 필수 입력 값입니다.")
-		@Size(min = 1, max = 50)
+		@Size(min = 1, max = 50,message = "1 ~ 50 글자 사이로 입력해주세요")
 		private String title;
 
 		@NotBlank(message = "글 내용은 필수 입력 값입니다.")
 		private String text;
 
-		@NotNull
+		@NotNull(message = "카테고리 선택은 필수 입니다.")
 		private Category category;
 
 		@NotNull
@@ -59,13 +59,13 @@ public class PostsDto {
 		private Long id;
 
 		@NotBlank(message = "제목은 필수 입력 값입니다.")
-		@Size(min = 1, max = 50)
+		@Size(min = 1, max = 50,message = "1 ~ 50 글자 사이로 입력해주세요")
 		private String title;
 
 		@NotBlank(message = "글 내용은 필수 입력 값입니다.")
 		private String text;
 
-		@NotNull
+		@NotNull(message = "카테고리 선택은 필수 입니다.")
 		private Category category;
 
 		@NotNull
@@ -110,15 +110,12 @@ public class PostsDto {
 
 		private String title;
 
-		@NotBlank(message = "글 내용은 필수 입력 값입니다.")
 		private String text;
 
-		@NotBlank(message = "카테고리 선택은 필수 입력 값입니다.")
 		private Category category;
 
 		private List<CommentsDto.Response> commentList;
 
-		@NotNull
 		private String writerNickName;
 		private Long views;
 		private Long likeCount;

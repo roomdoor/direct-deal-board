@@ -49,10 +49,6 @@ public class UserDto {
 			message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
 		private String password;
 
-		//	@NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-		//	// TODO 커스텀 벨리데이터 비밀번호 같은지 확인
-		//	private String rePassword;
-
 		// TODO 주소 찾기 API 이용하여 추가
 		private String address;
 
@@ -70,7 +66,6 @@ public class UserDto {
 		private String nickName;
 		private String phoneNumber;
 		private String password;
-		//	private String rePassword;
 		private String address;
 
 		public static Response of(User user) {
@@ -105,14 +100,6 @@ public class UserDto {
 		private String password;
 
 	}
-
-//	@Getter
-//	@Setter
-//	@Builder
-//	public static class DeleteResponse {
-//
-//	}
-
 
 	@Getter
 	@Setter

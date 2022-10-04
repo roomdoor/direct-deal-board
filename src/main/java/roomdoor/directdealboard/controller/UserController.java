@@ -42,14 +42,7 @@ public class UserController {
 
 	@PostMapping("/create")
 	public ResponseEntity<UserDto.Response> userCreate(
-		@RequestBody @Valid UserDto.CreateRequest createRequest
-//		, Errors errors
-	) {
-
-//		if (errors.hasErrors()) {
-//			Map<String, String> validResult = userService.validateHandler(errors);
-//			return new ResponseEntity<>(validResult, HttpStatus.BAD_REQUEST);
-//		}
+		@RequestBody @Valid UserDto.CreateRequest createRequest) {
 
 		return new ResponseEntity<>(userService.userCreate(createRequest), HttpStatus.CREATED);
 	}

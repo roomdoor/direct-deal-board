@@ -67,8 +67,8 @@ public class CommentsDto {
 		@NotNull
 		private Long postsId;
 
-		@NotEmpty
-		@Size(max = 100)
+		@NotEmpty(message = "댓글 내용 입력은 필수 입니다.")
+		@Size(max = 100, message = "100 글자 이하로 작성해 주세요")
 		private String comments;
 
 		@NotNull
@@ -91,8 +91,8 @@ public class CommentsDto {
 		private Long id;
 		private Long postsId;
 
-		@NotEmpty
-		@Size(max = 100)
+		@NotEmpty(message = "댓글 내용 입력은 필수 입니다.")
+		@Size(max = 100, message = "100 글자 이하로 작성해 주세요")
 		private String comments;
 
 		@NotNull

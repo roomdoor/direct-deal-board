@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import roomdoor.directdealboard.dto.CommentsDto.CreateRequest;
 import roomdoor.directdealboard.dto.CommentsDto.DeleteRequest;
 import roomdoor.directdealboard.dto.CommentsDto.UpdateRequest;
@@ -59,7 +60,10 @@ public class CommentsService {
 			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
 
-		comments.setComments(updateRequest.getComments());
+		if (!ObjectUtils.isEmpty(updateRequest.getComments())) {
+			comments.setComments(updateRequest.getComments());
+		}
+
 		return commentsRepository.save(comments);
 	}
 

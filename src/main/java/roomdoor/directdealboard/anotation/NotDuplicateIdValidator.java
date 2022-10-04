@@ -1,6 +1,5 @@
 package roomdoor.directdealboard.anotation;
 
-import java.text.MessageFormat;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +18,9 @@ public class NotDuplicateIdValidator implements ConstraintValidator<NotDuplicate
 
 	@Override
 	public boolean isValid(String id, ConstraintValidatorContext context) {
-		boolean result = userRepository.existsById(id);
-		if (!result) {
-			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(
-					MessageFormat.format("Id {0} 가 이미 존재합니다!", id))
-				.addConstraintViolation();
+		if (id == null) {
+			return true;
 		}
-
-		return !result;
+		return !userRepository.existsById(id);
 	}
 }

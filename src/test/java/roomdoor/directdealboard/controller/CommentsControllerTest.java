@@ -31,11 +31,10 @@ import roomdoor.directdealboard.service.CommentsService;
 
 @WebMvcTest(controllers = CommentsController.class
 	, excludeFilters = {
-	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfiguration.class),}
+	@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfiguration.class)}
 )
 @WithMockUser
 class CommentsControllerTest {
-
 	@MockBean
 	private CommentsService commentsService;
 
@@ -45,7 +44,8 @@ class CommentsControllerTest {
 	@Autowired
 	private MockMvc mvc;
 
-	@DisplayName("01_00. /comments/get")
+
+	@DisplayName("01_00. /comments/get success")
 	@Test
 	public void test_01_00() throws Exception {
 		//given
