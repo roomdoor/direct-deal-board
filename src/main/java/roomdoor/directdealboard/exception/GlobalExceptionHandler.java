@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import roomdoor.directdealboard.exception.exception.CommentsException;
 import roomdoor.directdealboard.exception.exception.PostsException;
 import roomdoor.directdealboard.exception.exception.UserException;
 import roomdoor.directdealboard.type.ErrorCode;
@@ -58,19 +59,32 @@ public class GlobalExceptionHandler {
 				.build());
 	}
 
+	@ExceptionHandler(CommentsException.class)
+	public ResponseEntity<?> handlerCommentsException(CommentsException e) {
 
-//	@ExceptionHandler(Exception.class)
-//	public ResponseEntity<?> handlerException(Exception e) {
-//
-//		return ResponseEntity
-//			.status(HttpStatus.BAD_REQUEST)
-//			.body(ApiExceptionEntity.builder()
-//				.httpStatus(HttpStatus.BAD_REQUEST)
-//				.errorCode(ErrorCode.EXCEPTION)
-//				.message(e.getMessage())
-//				.timestamp(LocalDateTime.now())
-//				.build());
-//	}
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(ApiExceptionEntity.builder()
+				.httpStatus(HttpStatus.BAD_REQUEST)
+				.errorCode(e.getErrorCode())
+				.message(e.getMessage())
+				.timestamp(LocalDateTime.now())
+				.build());
+	}
+
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> handlerException(Exception e) {
+
+		return ResponseEntity
+			.status(HttpStatus.BAD_REQUEST)
+			.body(ApiExceptionEntity.builder()
+				.httpStatus(HttpStatus.BAD_REQUEST)
+				.errorCode(ErrorCode.EXCEPTION)
+				.message(e.getMessage())
+				.timestamp(LocalDateTime.now())
+				.build());
+	}
 
 
 }
