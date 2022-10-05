@@ -72,7 +72,7 @@ class PostsServiceTest {
 
 		//when
 		PostsDto.Response posts = postsService.getPosts(1L);
-		System.out.println(posts.toString());
+
 		//then
 		assertEquals(posts.getTitle(), "test글 제목");
 		assertEquals(posts.getText(), "글 내용");

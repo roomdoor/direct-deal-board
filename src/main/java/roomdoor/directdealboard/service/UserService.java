@@ -212,6 +212,11 @@ public class UserService implements UserDetailsService {
 			throw new UserException(ErrorCode.SUSPENDED_USER);
 		}
 
+		if (user.getUserState() == UserState.DELETE) {
+			throw new UserException(ErrorCode.DELETED_USER);
+		}
+
+
 		List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 		grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 

@@ -99,7 +99,7 @@ class PostsControllerTest {
 
 	@DisplayName("02_00. /posts/list")
 	@Test
-	public void test_02() throws Exception {
+	public void test_02_00() throws Exception {
 		//given
 		List<PostsDto.Response> list = new ArrayList<>();
 		list.add(Response.builder().build());
@@ -112,6 +112,40 @@ class PostsControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.length()").value(3))
 			.andDo(print());
+		//then
+	}
+
+	@DisplayName("02_01. /posts/list page")
+	@Test
+	public void test_02_01() throws Exception {
+		//given
+		List<PostsDto.Response> list = new ArrayList<>();
+		for (int i = 0; i < 12; i++) {
+			list.add(Response.builder()
+				.title("12개 같은 제목 글")
+				.build());
+		}
+
+		for (int i = 0; i < 9; i++) {
+			list.add(Response.builder()
+				.title("12개 뒤에 9개 글")
+				.build());
+		}
+
+		given(postsService.list()).willReturn(list);
+
+		//when
+		mvc.perform(get("/posts/list/page?pageNumber=0"))
+			.andExpect(status().isOk())
+//			.andExpect(jsonPath("$.length()").value(10))
+//			.andExpect(jsonPath("$.get(0).title").value("\"12개 같은 제목 글\""))
+			.andDo(print());
+
+//		mvc.perform(get("/posts/list/page?pageNumber=1"))
+//			.andExpect(status().isOk())
+//			.andExpect(jsonPath("$.length()").value(10))
+//			.andExpect(jsonPath("$.get(0).title").value("\"12개 같은 제목 글\""))
+//			.andDo(print());
 		//then
 	}
 

@@ -3,6 +3,7 @@ package roomdoor.directdealboard.controller;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import roomdoor.directdealboard.dto.PostsDto;
+import roomdoor.directdealboard.dto.PostsDto.Response;
 import roomdoor.directdealboard.service.PostsService;
 
 @RestController
@@ -34,6 +36,12 @@ public class PostsController {
 	public ResponseEntity<List<PostsDto.Response>> list() {
 		return ResponseEntity.status(HttpStatus.OK)
 			.body(postsService.list());
+	}
+
+	@GetMapping("/list/page")
+	public ResponseEntity<Page<Response>> list(@RequestParam int pageNumber) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(postsService.list(pageNumber));
 	}
 
 	@PostMapping("/create")

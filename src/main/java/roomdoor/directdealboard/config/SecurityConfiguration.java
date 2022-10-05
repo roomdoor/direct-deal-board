@@ -54,13 +54,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.hasAuthority("ROLE_ADMIN");
 
 //        http.formLogin()
-//                .loginPage("/member/login")
+//                .loginPage("/user/login")
 //                .failureHandler(getFailureHandler())
 //                .successHandler(userAuthenticationSuccessHandler)
 //                .permitAll();
 
 //        http.logout()
-//                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
 //                .logoutSuccessUrl("/")
 //                .invalidateHttpSession(true);
 

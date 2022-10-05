@@ -3,6 +3,10 @@ package roomdoor.directdealboard.service;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import roomdoor.directdealboard.dto.PostsDto;
@@ -45,8 +49,16 @@ public class PostsService {
 		return PostsDto.Response.of(posts);
 	}
 
-	public List<PostsDto.Response> list() {
-		return PostsDto.Response.of(postsRepository.findAll());
+	public List<Response> list() {
+		return Response.of(postsRepository.findAll());
+	}
+
+	public Page<Response> list(int pageNumber) {
+		Pageable pagealbe = PageRequest.of(pageNumber, 10);
+
+		Page<Posts> result = postsRepository.findAll(pagealbe);
+
+		return new PageImpl<>(Response.of(result.getContent()));
 	}
 
 
@@ -83,8 +95,6 @@ public class PostsService {
 		if (!passwordEncoder.matches(updateRequest.getUserPassword(), user.getPassword())) {
 			throw new UserException(ErrorCode.PASSWORD_MISMATCH);
 		}
-
-
 
 		posts.setTitle(updateRequest.getTitle());
 		posts.setText(updateRequest.getText());
