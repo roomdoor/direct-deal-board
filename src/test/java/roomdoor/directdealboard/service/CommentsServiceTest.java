@@ -14,8 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import roomdoor.directdealboard.dto.CommentsDto.DeleteRequest;
+import roomdoor.directdealboard.dto.CommentsDto.Response;
 import roomdoor.directdealboard.dto.CommentsDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Comments;
 import roomdoor.directdealboard.entity.User;
@@ -53,7 +56,7 @@ class CommentsServiceTest {
 				.userId("ss@ss.com")
 				.build()));
 		//when
-		Comments comment = commentsService.getComment(1L);
+		Response comment = commentsService.getComment(1L);
 
 		//then
 		assertEquals(comment.getId(), 1L);
@@ -87,10 +90,34 @@ class CommentsServiceTest {
 		given(commentsRepository.findAllByPostsId(any())).willReturn(list);
 
 		//when
-		List<Comments> list1 = commentsService.list(3L);
+		List<Response> list1 = commentsService.list(3L);
 
 		//then
 		assertEquals(list1.size(), 4);
+	}
+
+	@DisplayName("02_01. list page")
+	@Test
+	public void test_02_01() {
+		//given
+		List<Comments> list = new ArrayList<>();
+
+		for (int i = 0; i < 10; i++) {
+			list.add(Comments.builder()
+				.comments("10개 댓글").build());
+		}
+
+		Page<Comments> listPage = new PageImpl<>(list);
+
+		given(commentsRepository.findAllByPostsId(any(), any())).willReturn(listPage);
+
+		//when
+		Page<Response> listPage1 = commentsService.list(1L, 0);
+		List<Response> list1 = listPage1.getContent();
+
+		//then
+		assertEquals(list1.size(), 10);
+		assertEquals(list1.get(0).getComments(), "10개 댓글");
 	}
 
 	@DisplayName("03_00. update success")
@@ -110,7 +137,7 @@ class CommentsServiceTest {
 
 		given(passwordEncoder.matches(any(), any())).willReturn(true);
 		//when
-		Comments update = commentsService.update(UpdateRequest.builder()
+		Response update = commentsService.update(UpdateRequest.builder()
 			.comments("update").build());
 
 		//then
@@ -178,7 +205,7 @@ class CommentsServiceTest {
 		//given
 		given(commentsRepository.findByPostsIdAndId(any(), any())).willReturn(
 			Optional.of(Comments.builder()
-					.writerNickName("ss@ss.com")
+				.writerNickName("ss@ss.com")
 				.userId("ss@ss.com")
 				.build()));
 
@@ -200,7 +227,7 @@ class CommentsServiceTest {
 //given
 		given(commentsRepository.findByPostsIdAndId(any(), any())).willReturn(
 			Optional.of(Comments.builder()
-					.writerNickName("ss@ss.com")
+				.writerNickName("ss@ss.com")
 				.userId("ss@ss.com")
 				.build()));
 
