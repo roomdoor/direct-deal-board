@@ -21,7 +21,10 @@ public enum ErrorCode {
 	NOT_FOUND_COMMENTS("존재하지 않는 댓글 입니다."),
 
 
+	ALREADY_HEARTED("이미 좋아요가 눌러진 상태입니다."),
+	NOT_FOUND_HEART("존재하지 않는 좋아요 기록입니다."),
+
 	EXCEPTION("에러");
 
 	private final String description;
-}
+	}
