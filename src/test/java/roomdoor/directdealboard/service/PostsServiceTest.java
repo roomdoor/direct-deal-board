@@ -13,6 +13,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import roomdoor.directdealboard.dto.PostsDto;
@@ -92,9 +96,9 @@ class PostsServiceTest {
 		//then
 	}
 
-	@DisplayName("02. list")
+	@DisplayName("02_00. list")
 	@Test
-	public void test_02() {
+	public void test_02_00() {
 		//given
 		List<Posts> postsList = new ArrayList<>();
 		postsList.add(Posts.builder().build());
@@ -108,6 +112,28 @@ class PostsServiceTest {
 
 		//then
 		assertEquals(posts.size(), 3);
+	}
+
+	@DisplayName("02_01. list page")
+	@Test
+	public void test_02_01() {
+		//given
+		List<Posts> postsList = new ArrayList<>();
+		for (int i = 0; i < 8; i++) {
+			postsList.add(Posts.builder()
+				.title("1 page posts")
+				.build());
+		}
+
+		Page<Posts> postsPage = new PageImpl<>(postsList);
+		given(postsRepository.findAll((Pageable) any())).willReturn(postsPage);
+
+		//when
+		Page<Response> posts = postsService.list(1);
+
+		//then
+		assertEquals(posts.getContent().size(), 8);
+		assertEquals(posts.getContent().get(0).getTitle(), "1 page posts");
 	}
 
 	@DisplayName("03. user create success")

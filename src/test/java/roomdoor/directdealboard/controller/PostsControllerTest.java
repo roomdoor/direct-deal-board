@@ -24,6 +24,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -115,37 +118,40 @@ class PostsControllerTest {
 		//then
 	}
 
-	@DisplayName("02_01. /posts/list page")
+	@DisplayName("02_01. /posts/list/page")
 	@Test
 	public void test_02_01() throws Exception {
 		//given
 		List<PostsDto.Response> list = new ArrayList<>();
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 10; i++) {
 			list.add(Response.builder()
-				.title("12개 같은 제목 글")
+				.title("첫번째 페이지 글 ")
 				.build());
 		}
 
+		given(postsService.list(0)).willReturn(new PageImpl<>(list));
+
+		list = new ArrayList<>();
 		for (int i = 0; i < 9; i++) {
 			list.add(Response.builder()
-				.title("12개 뒤에 9개 글")
+				.title("두번째 페이지 글 ")
 				.build());
 		}
-
-		given(postsService.list()).willReturn(list);
+		given(postsService.list(1)).willReturn(new PageImpl<>(list));
 
 		//when
 		mvc.perform(get("/posts/list/page?pageNumber=0"))
 			.andExpect(status().isOk())
-//			.andExpect(jsonPath("$.length()").value(10))
-//			.andExpect(jsonPath("$.get(0).title").value("\"12개 같은 제목 글\""))
+			.andExpect(jsonPath("$.content.size()").value(10))
+			.andExpect(jsonPath("$.content[0].title").value("첫번째 페이지 글 "))
 			.andDo(print());
 
-//		mvc.perform(get("/posts/list/page?pageNumber=1"))
-//			.andExpect(status().isOk())
-//			.andExpect(jsonPath("$.length()").value(10))
-//			.andExpect(jsonPath("$.get(0).title").value("\"12개 같은 제목 글\""))
-//			.andDo(print());
+		mvc.perform(get("/posts/list/page?pageNumber=1"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.content.size()").value(9))
+			.andExpect(jsonPath("$.content[0].title").value("두번째 페이지 글 "))
+			.andDo(print());
+
 		//then
 	}
 
