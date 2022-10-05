@@ -3,6 +3,7 @@ package roomdoor.directdealboard.controller;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,13 +28,20 @@ public class CommentsController {
 	@GetMapping("/get")
 	public ResponseEntity<CommentsDto.Response> getComments(@RequestParam Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(CommentsDto.Response.of(commentsService.getComment(id)));
+			.body(commentsService.getComment(id));
 	}
 
 	@GetMapping("/list")
 	public ResponseEntity<List<Response>> list(@RequestParam Long id) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(Response.of(commentsService.list(id)));
+			.body(commentsService.list(id));
+	}
+
+	@GetMapping("/list/page")
+	public ResponseEntity<Page<Response>> list(@RequestParam Long id,
+		@RequestParam int pageNumber) {
+		return ResponseEntity.status(HttpStatus.OK)
+			.body(commentsService.list(id, pageNumber));
 	}
 
 	@PostMapping("/create")
@@ -46,7 +54,7 @@ public class CommentsController {
 	public ResponseEntity<CommentsDto.Response> update(
 		@RequestBody @Valid CommentsDto.UpdateRequest updateRequest) {
 		return ResponseEntity.status(HttpStatus.OK)
-			.body(CommentsDto.Response.of(commentsService.update(updateRequest)));
+			.body(commentsService.update(updateRequest));
 	}
 
 	@DeleteMapping("/delete")

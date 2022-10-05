@@ -2,11 +2,16 @@ package roomdoor.directdealboard.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import roomdoor.directdealboard.dto.CommentsDto.CreateRequest;
 import roomdoor.directdealboard.dto.CommentsDto.DeleteRequest;
+import roomdoor.directdealboard.dto.CommentsDto.Response;
 import roomdoor.directdealboard.dto.CommentsDto.UpdateRequest;
 import roomdoor.directdealboard.entity.Comments;
 import roomdoor.directdealboard.entity.User;
@@ -26,13 +31,18 @@ public class CommentsService {
 
 	private final BCryptPasswordEncoder passwordEncoder;
 
-	public Comments getComment(Long id) {
-		return commentsRepository.findById(id)
-			.orElseThrow(() -> new CommentsException(ErrorCode.NOT_FOUND_COMMENTS));
+	public Response getComment(Long id) {
+		return Response.of(commentsRepository.findById(id)
+			.orElseThrow(() -> new CommentsException(ErrorCode.NOT_FOUND_COMMENTS)));
 	}
 
-	public List<Comments> list(Long id) {
-		return commentsRepository.findAllByPostsId(id);
+	public List<Response> list(Long id) {
+		return Response.of(commentsRepository.findAllByPostsId(id));
+	}
+
+	public Page<Response> list(Long id, int pageNumber) {
+		Pageable pageable = PageRequest.of(pageNumber, 10);
+		return new PageImpl<>(Response.of(commentsRepository.findAllByPostsId(id, pageable).getContent()));
 	}
 
 	public Comments create(CreateRequest createRequest) {
@@ -48,7 +58,7 @@ public class CommentsService {
 			.build());
 	}
 
-	public Comments update(UpdateRequest updateRequest) {
+	public Response update(UpdateRequest updateRequest) {
 		Comments comments = commentsRepository.findByPostsIdAndId(updateRequest.getPostsId(),
 				updateRequest.getId())
 			.orElseThrow(() -> new CommentsException(ErrorCode.NOT_FOUND_COMMENTS));
@@ -64,7 +74,7 @@ public class CommentsService {
 			comments.setComments(updateRequest.getComments());
 		}
 
-		return commentsRepository.save(comments);
+		return Response.of(commentsRepository.save(comments));
 	}
 
 	public boolean delete(DeleteRequest deleteRequest) {
