@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 public interface Auditable {
 
-    LocalDateTime getCreatedAt();
+    String getCreatedAt();
 
-    LocalDateTime getUpdatedAt();
+    String getUpdatedAt();
 
-    void setCreatedAt(LocalDateTime createdAt);
+    void setCreatedAt(String createdAt);
 
-    void setUpdatedAt(LocalDateTime updatedAt);
+    void setUpdatedAt(String updatedAt);
 
 }
