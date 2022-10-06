@@ -11,9 +11,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -31,6 +35,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import roomdoor.directdealboard.config.SecurityConfiguration;
 import roomdoor.directdealboard.dto.PostsDto;
 import roomdoor.directdealboard.dto.PostsDto.CreateRequest;
@@ -199,22 +205,30 @@ class PostsControllerTest {
 		//when
 		CreateRequest request = CreateRequest.builder()
 			.build();
-		mvc.perform(post("/posts/create")
+//		ResultActions perform = mvc.perform(post("/posts/create")
+//			.contentType(MediaType.APPLICATION_JSON)
+//			.content(objectMapper.writeValueAsString(request))
+//			.with(SecurityMockMvcRequestPostProcessors.csrf()))
+//		//			.andReturn()
+//			;
+
+//		Set<ConstraintViolation<CreateRequest>> validate = validatorInjected.validate(request);
+//
+//		//then
+//		Iterator<ConstraintViolation<CreateRequest>> iterator = validate.iterator();
+//		List<String> messages = new ArrayList<>();
+//		while (iterator.hasNext()) {
+//			ConstraintViolation<CreateRequest> next = iterator.next();
+//			messages.add(next.getMessage());
+//			System.out.println("message = " + next.getMessage());
+//		}
+
+		MvcResult mvcResult = mvc.perform(post("/posts/create")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request))
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 			.andReturn();
-
-		Set<ConstraintViolation<CreateRequest>> validate = validatorInjected.validate(request);
-
-		//then
-		Iterator<ConstraintViolation<CreateRequest>> iterator = validate.iterator();
-		List<String> messages = new ArrayList<>();
-		while (iterator.hasNext()) {
-			ConstraintViolation<CreateRequest> next = iterator.next();
-			messages.add(next.getMessage());
-			System.out.println("message = " + next.getMessage());
-		}
+		System.out.println(mvcResult.getResponse().getContentAsString(StandardCharsets.UTF_8));
 	}
 
 	@DisplayName("04_00. /posts/update success")

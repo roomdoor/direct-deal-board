@@ -1,13 +1,11 @@
 package roomdoor.directdealboard.service;
 
-import java.io.IOException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import roomdoor.directdealboard.dto.HeartDto;
 import roomdoor.directdealboard.entity.Heart;
 import roomdoor.directdealboard.entity.Posts;
-import roomdoor.directdealboard.entity.User;
 import roomdoor.directdealboard.exception.exception.HeartException;
 import roomdoor.directdealboard.exception.exception.PostsException;
 import roomdoor.directdealboard.exception.exception.UserException;
@@ -27,10 +25,10 @@ public class HeartService {
 //	private final JwtTokenProvider jwtTokenProvider;
 //	private User user;
 
-	public void heart(HeartDto heartDto) {
+	public HeartDto heart(HeartDto heartDto) {
 //		validateToken(heartDto, jwtToken);
 
-		if (findHeartWithUserAndCampaignId(heartDto).isPresent()) {
+		if (findHeartWithUserIdAndPostsId(heartDto).isPresent()) {
 			throw new HeartException(ErrorCode.ALREADY_HEARTED);
 		}
 
@@ -40,36 +38,48 @@ public class HeartService {
 			.userId(userRepository.findById(heartDto.getUserId())
 				.orElseThrow(() -> new UserException(ErrorCode.NOT_FOUND_USER)).getId())
 			.build();
-		heartRepository.save(heart);
 
-		updateHeartCount(heartDto.getPostsId(), 1);
+		Heart save = heartRepository.save(heart);
 
+		Long heartCount = updateHeartCount(heartDto.getPostsId(), 1);
+
+		HeartDto result = HeartDto.of(save);
+		result.setNowHeartCount(heartCount);
+
+		return result;
 	}
 
-	public void unHeart(HeartDto heartDto){
+	public HeartDto unHeart(HeartDto heartDto) {
 //		validateToken(heartDto, jwtToken);
 
-		Heart heart = findHeartWithUserAndCampaignId(heartDto).orElseThrow(
+		Heart heart = findHeartWithUserIdAndPostsId(heartDto).orElseThrow(
 			() -> new HeartException(ErrorCode.NOT_FOUND_HEART));
 
 		heartRepository.deleteById(heart.getId());
 
-		updateHeartCount(heartDto.getPostsId(), -1);
+		Long heartCount = updateHeartCount(heartDto.getPostsId(), -1);
+
+
+		heartDto.setNowHeartCount(heartCount);
+		return heartDto;
 	}
 
 //	public void validateToken(HeartDto heartDto, String jwtToken) {
 //		// 생략 ... 유효한 토큰인지 검증하는 부분
 //	}
 
-	public Optional<Heart> findHeartWithUserAndCampaignId(HeartDto heartDto) {
+	public Optional<Heart> findHeartWithUserIdAndPostsId(HeartDto heartDto) {
 		return heartRepository
 			.findHeartByUserIdAndPostsId(heartDto.getUserId(), heartDto.getPostsId());
 	}
 
-	public void updateHeartCount(Long postsId, Integer plusOrMinus) {
+	public Long updateHeartCount(Long postsId, Integer plusOrMinus) {
 		Posts posts = postsRepository.findById(postsId)
 			.orElseThrow(() -> new PostsException(ErrorCode.NOT_FOUND_POSTS));
-		posts.setLikeCount(posts.getLikeCount() + plusOrMinus);
+		long result = posts.getLikeCount() + plusOrMinus;
+		posts.setLikeCount(result);
 		postsRepository.save(posts);
+
+		return result;
 	}
 }
